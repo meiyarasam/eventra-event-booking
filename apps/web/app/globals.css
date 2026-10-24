@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0B0F19;
+  --foreground: #F8FAFC;
+}
+
+.light {
+  --background: #FAF9F6;
+  --foreground: #0F172A;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  /* Global default input / textarea / select styling */
+  input, textarea, select {
+    color: #F8FAFC;
+    background-color: #1E293B;
+    border-color: #334155;
+  }
+
+  /* When input / textarea / select is inside an explicit light container or has light class */
+  .light input, .light textarea, .light select,
+  input.bg-white, input.bg-stone-50, input.bg-stone-100,
+  textarea.bg-white, textarea.bg-stone-50, textarea.bg-stone-100,
+  select.bg-white, select.bg-stone-50, select.bg-stone-100,
+  .bg-white input:not([class*="dark:bg-"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-[#1E293B]"]),
+  .bg-white textarea:not([class*="dark:bg-"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-[#1E293B]"]),
+  .bg-white select:not([class*="dark:bg-"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-[#1E293B]"]),
+  .bg-stone-50 input:not([class*="dark:bg-"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-[#1E293B]"]),
+  .bg-stone-50 textarea:not([class*="dark:bg-"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-[#1E293B]"]),
+  .bg-stone-50 select:not([class*="dark:bg-"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-[#1E293B]"]) {
+    color: #0F172A !important;
+    background-color: #FFFFFF;
+    caret-color: #0F172A !important;
+  }
+
+  /* Specific rule for dark mode inputs with light classes */
+  .dark input.bg-white,
+  .dark input[class*="bg-white"]:not([class*="dark:bg-"]),
+  .dark textarea.bg-white,
+  .dark textarea[class*="bg-white"]:not([class*="dark:bg-"]),
+  .dark select.bg-white,
+  .dark select[class*="bg-white"]:not([class*="dark:bg-"]) {
+    color: #0F172A !important;
+    caret-color: #0F172A !important;
+  }
+
+  /* When inside dark theme with dark backgrounds */
+  .dark input:not(.bg-white):not(.bg-stone-50):not(.bg-stone-100),
+  .dark textarea:not(.bg-white):not(.bg-stone-50):not(.bg-stone-100),
+  .dark select:not(.bg-white):not(.bg-stone-50):not(.bg-stone-100) {
+    color: #F8FAFC !important;
+    caret-color: #F8FAFC !important;
+  }
+
+  /* High-contrast and readable placeholders */
+  input::placeholder,
+  textarea::placeholder {
+    color: #94A3B8 !important;
+    opacity: 1 !important;
+  }
+
+  input.bg-white::placeholder,
+  textarea.bg-white::placeholder,
+  .bg-white input::placeholder,
+  .bg-white textarea::placeholder {
+    color: #64748B !important;
+    opacity: 1 !important;
+  }
+
+  /* Autofill styling overrides across WebKit and Gecko */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #F8FAFC !important;
+    -webkit-box-shadow: 0 0 0px 1000px #1E293B inset !important;
+    box-shadow: 0 0 0px 1000px #1E293B inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: #F8FAFC !important;
+  }
+
+  /* In light containers, autofill text is dark */
+  .bg-white input:-webkit-autofill,
+  input.bg-white:-webkit-autofill {
+    -webkit-text-fill-color: #0F172A !important;
+    -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+    box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+    caret-color: #0F172A !important;
+  }
+
+  /* Text selection */
+  ::selection {
+    background-color: #F97316;
+    color: #FFFFFF;
+  }
+
+  /* In dark mode: ensure headings and text with text-navy-950 or text-stone-900 are fully visible */
+  .dark .text-navy-950:not(.bg-white *):not(.bg-stone-50 *):not(.bg-stone-100 *) {
+    color: #F8FAFC !important;
+  }
+
+  .dark .text-stone-900:not(.bg-white *):not(.bg-stone-50 *):not(.bg-stone-100 *) {
+    color: #F8FAFC !important;
+  }
+
+  .dark .text-stone-800:not(.bg-white *):not(.bg-stone-50 *):not(.bg-stone-100 *) {
+    color: #F1F5F9 !important;
+  }
+
+  .dark .text-stone-700:not(.bg-white *):not(.bg-stone-50 *):not(.bg-stone-100 *) {
+    color: #E2E8F0 !important;
+  }
+
+  .dark .text-stone-600:not(.bg-white *):not(.bg-stone-50 *):not(.bg-stone-100 *) {
+    color: #CBD5E1 !important;
+  }
+
+  .dark .text-stone-500:not(.bg-white *):not(.bg-stone-50 *):not(.bg-stone-100 *) {
+    color: #94A3B8 !important;
+  }
+
+  /* When hover pseudo-class is applied, make sure it remains bright and visible in dark mode */
+  .dark .hover\:text-stone-900:hover:not(.bg-white *):not(.bg-stone-50 *) {
+    color: #FFFFFF !important;
+  }
+
+  .dark .hover\:text-navy-950:hover:not(.bg-white *):not(.bg-stone-50 *) {
+    color: #FFFFFF !important;
+  }
+
+  /* Disabled and read-only inputs */
+  input:disabled, textarea:disabled, select:disabled,
+  input[readonly], textarea[readonly] {
+    opacity: 0.75 !important;
+    cursor: not-allowed;
+  }
+}
+
+/* Vibrant Brand Gradient Text */
+.gradient-brand-text {
+  background: linear-gradient(135deg, #F97316 0%, #F43F5E 50%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-gold-text {
+  background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-indigo-text {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Styles */
+.glass-dark {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Ambient Dot Grid Pattern */
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dot-pattern-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Subtle Shimmer & Light Sweeps */
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0.25) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 3s infinite;
+}
+
+/* Smooth Interactive Card Lift */
+.interactive-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.14), 0 0 20px -5px rgba(249, 115, 22, 0.15);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Hide scrollbar utilities */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+/* Print Styles for Digital Tickets */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  header, footer, .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* ========================================================
+   Live Concert Stage Background Animation & Lighting Effects
+   ======================================================== */
+@keyframes stage-beam-left {
+  0%, 100% {
+    transform: rotate(-14deg) scaleY(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: rotate(10deg) scaleY(1.15);
+    opacity: 0.65;
+  }
+}
+
+@keyframes stage-beam-right {
+  0%, 100% {
+    transform: rotate(14deg) scaleY(1.1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: rotate(-10deg) scaleY(1);
+    opacity: 0.65;
+  }
+}
+
+@keyframes stage-beam-center {
+  0%, 100% {
+    transform: translateX(-50%) rotate(0deg) scale(0.95);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translateX(-50%) rotate(-10deg) scale(1.1);
+    opacity: 0.55;
+  }
+  66% {
+    transform: translateX(-50%) rotate(10deg) scale(1.05);
+    opacity: 0.5;
+  }
+}
+
+@keyframes aurora-float {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(25px, -18px) scale(1.12);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.92);
+  }
+}
+
+@keyframes bass-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.75);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-stage-beam-left {
+  transform-origin: top left;
+  animation: stage-beam-left 8s ease-in-out infinite;
+}
+
+.animate-stage-beam-right {
+  transform-origin: top right;
+  animation: stage-beam-right 10s ease-in-out infinite;
+}
+
+.animate-stage-beam-center {
+  transform-origin: top center;
+  animation: stage-beam-center 12s ease-in-out infinite;
+}
+
+.animate-aurora-float {
+  animation: aurora-float 15s ease-in-out infinite;
+}
+
+.animate-bass-pulse-1 {
+  animation: bass-pulse 4.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-bass-pulse-2 {
+  animation: bass-pulse 4.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite 2.25s;
+}
+

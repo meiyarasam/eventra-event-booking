@@ -1,0 +1,378 @@
+// EVENTRA Prisma Database Schema
+// Optimized for Neon Serverless PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ATTENDEE
+  ORGANIZER
+  ADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum OrganizerRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EventStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  PUBLISHED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum ReservationStatus {
+  ACTIVE
+  CONFIRMED
+  EXPIRED
+  CANCELLED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+}
+
+enum TicketStatus {
+  VALID
+  CHECKED_IN
+  CANCELLED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum PaymentMethod {
+  CARD
+  UPI
+}
+
+model User {
+  id                String            @id @default(uuid())
+  email             String            @unique
+  passwordHash      String
+  name              String
+  role              UserRole          @default(ATTENDEE)
+  status            AccountStatus     @default(ACTIVE)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  profile           UserProfile?
+  events            Event[]           @relation("OrganizerEvents")
+  bookings          Booking[]
+  reservations      InventoryReservation[]
+  savedEvents       SavedEvent[]
+  notifications     Notification[]
+  organizerRequests OrganizerRequest[] @relation("UserOrganizerRequests")
+  reviewedRequests  OrganizerRequest[] @relation("AdminReviewedRequests")
+  reviewedApprovals EventApproval[]   @relation("AdminEventApprovals")
+  auditLogs         AuditLog[]
+  checkedInTickets  Ticket[]          @relation("StaffCheckedInTickets")
+
+  @@index([role])
+  @@index([status])
+}
+
+model UserProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  phone            String?
+  bio              String?
+  avatarUrl        String?
+  organizationName String?
+  websiteUrl       String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OrganizerRequest {
+  id               String                 @id @default(uuid())
+  userId           String
+  organizationName String
+  reason           String
+  websiteUrl       String?
+  status           OrganizerRequestStatus @default(PENDING)
+  rejectionReason  String?
+  reviewedById     String?
+  reviewedAt       DateTime?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  user             User                   @relation("UserOrganizerRequests", fields: [userId], references: [id], onDelete: Cascade)
+  reviewer         User?                  @relation("AdminReviewedRequests", fields: [reviewedById], references: [id])
+
+  @@index([status])
+  @@index([userId])
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  events      Event[]
+}
+
+model Event {
+  id                 String           @id @default(uuid())
+  organizerId        String
+  categoryId         String
+  title              String
+  slug               String           @unique
+  description        String
+  bannerUrl          String
+  startDate          DateTime
+  endDate            DateTime
+  timeZone           String           @default("UTC")
+  isOnline           Boolean          @default(false)
+  venueName          String?
+  venueAddress       String?
+  city               String?
+  capacity           Int
+  cancellationPolicy String           @default("Free cancellation up to 48 hours before the event start time.")
+  status             EventStatus      @default(DRAFT)
+  rejectionReason    String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  organizer          User             @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
+  category           Category         @relation(fields: [categoryId], references: [id])
+  ticketTypes        TicketType[]
+  bookings           Booking[]
+  reservations       InventoryReservation[]
+  savedBy            SavedEvent[]
+  approvals          EventApproval[]
+
+  @@index([status])
+  @@index([organizerId])
+  @@index([categoryId])
+  @@index([startDate])
+  @@index([city])
+}
+
+model TicketType {
+  id                String            @id @default(uuid())
+  eventId           String
+  name              String
+  description       String?
+  price             Decimal           @db.Decimal(10, 2)
+  totalQuantity     Int
+  soldQuantity      Int               @default(0)
+  maxPerUser        Int               @default(5)
+  saleStartDate     DateTime?
+  saleEndDate       DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  reservationItems  ReservationItem[]
+  bookingItems      BookingItem[]
+  tickets           Ticket[]
+
+  @@index([eventId])
+}
+
+model InventoryReservation {
+  id          String            @id @default(uuid())
+  eventId     String
+  userId      String
+  expiresAt   DateTime
+  status      ReservationStatus @default(ACTIVE)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  event       Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       ReservationItem[]
+  booking     Booking?
+
+  @@index([expiresAt, status])
+  @@index([userId])
+  @@index([eventId])
+}
+
+model ReservationItem {
+  id            String               @id @default(uuid())
+  reservationId String
+  ticketTypeId  String
+  quantity      Int
+  price         Decimal              @db.Decimal(10, 2)
+
+  reservation   InventoryReservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  ticketType    TicketType           @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+
+  @@index([reservationId])
+  @@index([ticketTypeId])
+}
+
+model Booking {
+  id                 String                @id @default(uuid())
+  bookingReference   String                @unique
+  userId             String
+  eventId            String
+  reservationId      String?               @unique
+  totalAmount        Decimal               @db.Decimal(10, 2)
+  status             BookingStatus         @default(PENDING)
+  cancelledAt        DateTime?
+  cancellationReason String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  user               User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event              Event                 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  reservation        InventoryReservation? @relation(fields: [reservationId], references: [id])
+  items              BookingItem[]
+  tickets            Ticket[]
+  payments           PaymentSimulation[]
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([status])
+}
+
+model BookingItem {
+  id           String     @id @default(uuid())
+  bookingId    String
+  ticketTypeId String
+  quantity     Int
+  unitPrice    Decimal    @db.Decimal(10, 2)
+  subtotal     Decimal    @db.Decimal(10, 2)
+
+  booking      Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+model Ticket {
+  id             String       @id @default(uuid())
+  ticketNumber   String       @unique
+  ticketToken    String       @unique
+  bookingId      String
+  ticketTypeId   String
+  attendeeName   String
+  attendeeEmail  String
+  status         TicketStatus @default(VALID)
+  checkedInAt    DateTime?
+  checkedInById  String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  booking        Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  ticketType     TicketType   @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+  checkedInBy    User?        @relation("StaffCheckedInTickets", fields: [checkedInById], references: [id])
+
+  @@index([bookingId])
+  @@index([ticketTypeId])
+  @@index([ticketToken])
+  @@index([status])
+}
+
+model PaymentSimulation {
+  id                   String        @id @default(uuid())
+  bookingId            String
+  userId               String
+  amount               Decimal       @db.Decimal(10, 2)
+  currency             String        @default("INR")
+  paymentMethod        PaymentMethod
+  status               PaymentStatus
+  transactionReference String        @unique
+  failureReason        String?
+  cardLast4            String?
+  cardHolder           String?
+  upiId                String?
+  createdAt            DateTime      @default(now())
+
+  booking              Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+model SavedEvent {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("INFO")
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}
+
+model EventApproval {
+  id        String      @id @default(uuid())
+  eventId   String
+  adminId   String
+  status    EventStatus
+  reason    String?
+  createdAt DateTime    @default(now())
+
+  event     Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  admin     User        @relation("AdminEventApprovals", fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  details    String?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
+}

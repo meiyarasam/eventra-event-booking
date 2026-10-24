@@ -1,0 +1,35 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="eventra-fav-grad-pub" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA216" />
+      <stop offset="45%" stop-color="#FF7A00" />
+      <stop offset="100%" stop-color="#F55200" />
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle Container -->
+  <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#eventra-fav-grad-pub)" />
+
+  <!-- Tilted Ticket with Notches -->
+  <g transform="translate(24, 24) rotate(-45) translate(-13, -8)">
+    <path
+      d="M 2.5 0.5 L 8.5 0.5 C 8.5 2.5, 10.5 4, 13 4 C 15.5 4, 17.5 2.5, 17.5 0.5 L 23.5 0.5 C 24.6 0.5, 25.5 1.4, 25.5 2.5 L 25.5 13.5 C 25.5 14.6, 24.6 15.5, 23.5 15.5 L 17.5 15.5 C 17.5 13.5, 15.5 12, 13 12 C 10.5 12, 8.5 13.5, 8.5 15.5 L 2.5 15.5 C 1.4 15.5, 0.5 14.6, 0.5 13.5 L 0.5 2.5 C 0.5 1.4, 1.4 0.5, 2.5 0.5 Z"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <line
+      x1="13"
+      y1="4.5"
+      x2="13"
+      y2="11.5"
+      stroke="#FFFFFF"
+      stroke-width="1.6"
+      stroke-dasharray="1.5 2"
+      stroke-linecap="round"
+      opacity="0.9"
+    />
+  </g>
+</svg>
