@@ -26,7 +26,10 @@ export async function connectDatabase() {
   } catch (error) {
     isDatabaseConnected = false;
     console.warn('⚠️ Database connection warning:', (error as Error).message);
-    console.log('ℹ️ Running in resilient In-Memory Dev Mode with complete mock simulation.');
+    if (env.isProduction) {
+  throw error;
+}
+console.log('ℹ️ Running in resilient In-Memory Dev Mode with complete mock simulation.');
   }
 }
 
