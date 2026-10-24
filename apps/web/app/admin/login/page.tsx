@@ -83,7 +83,7 @@ function AdminLoginForm() {
     }
   };
 
-  const handleAutofill = (autoSubmit = false) => {
+  const handleAutofill = () => {
     const demoEmail = 'admin@eventra.com';
     const demoPass = 'AdminPassword123!';
     setEmail(demoEmail);
@@ -91,10 +91,6 @@ function AdminLoginForm() {
     setValue('email', demoEmail, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
     setValue('password', demoPass, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
     toast.success('Admin credentials autofilled!');
-
-    if (autoSubmit) {
-      performLogin(demoEmail, demoPass);
-    }
   };
 
   const onSubmit = async () => {
@@ -144,7 +140,7 @@ function AdminLoginForm() {
         )}
 
         {/* Admin Demo Credentials Quick-Fill (Fast Evaluation) */}
-        <div className="p-4 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+        <div className="p-4 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-between gap-3 shadow-lg">
           <div className="flex items-center gap-2.5">
             <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
             <div className="text-left">
@@ -152,25 +148,14 @@ function AdminLoginForm() {
               <p className="text-[12px] text-stone-200 font-mono">admin@eventra.com • AdminPassword123!</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 self-end sm:self-auto">
-            <button
-              type="button"
-              id="admin-autofill-btn"
-              onClick={() => handleAutofill(false)}
-              className="px-3 py-1.5 rounded-xl bg-amber-500/25 hover:bg-amber-500/40 border border-amber-500/50 text-xs font-semibold text-amber-200 hover:text-white transition-all cursor-pointer"
-            >
-              Autofill
-            </button>
-            <button
-              type="button"
-              id="admin-oneclick-login-btn"
-              onClick={() => handleAutofill(true)}
-              disabled={isLoading}
-              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-brand-500 hover:from-amber-600 hover:to-brand-600 text-xs font-bold text-white shadow-md transition-all cursor-pointer disabled:opacity-50"
-            >
-              1-Click Sign In
-            </button>
-          </div>
+          <button
+            type="button"
+            id="admin-autofill-btn"
+            onClick={handleAutofill}
+            className="px-4 py-2 rounded-xl bg-amber-500/25 hover:bg-amber-500/40 border border-amber-500/50 text-xs font-bold text-amber-200 hover:text-white transition-all cursor-pointer shadow-sm shrink-0"
+          >
+            Autofill
+          </button>
         </div>
 
         {/* Admin Login Card */}
@@ -221,15 +206,16 @@ function AdminLoginForm() {
                   rightElement={
                     <button
                       type="button"
+                      id="toggle-admin-password"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="p-1.5 rounded-lg text-stone-500 hover:text-stone-800 hover:bg-stone-200/60 transition-colors focus:outline-none"
+                      className="p-1.5 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-200/80 transition-colors focus:outline-none cursor-pointer flex items-center justify-center"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? (
-                        <EyeOff className="w-4 h-4 text-stone-600" />
+                        <EyeOff className="w-5 h-5 text-slate-800" />
                       ) : (
-                        <Eye className="w-4 h-4 text-stone-600" />
+                        <Eye className="w-5 h-5 text-slate-800" />
                       )}
                     </button>
                   }

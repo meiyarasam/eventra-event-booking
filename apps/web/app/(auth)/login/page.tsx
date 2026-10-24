@@ -156,15 +156,16 @@ function LoginForm() {
                   rightElement={
                     <button
                       type="button"
+                      id="toggle-login-password"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors focus:outline-none"
+                      className="p-1.5 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors focus:outline-none cursor-pointer flex items-center justify-center"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? (
-                        <EyeOff className="w-4 h-4 text-stone-500" />
+                        <EyeOff className="w-5 h-5 text-stone-700" />
                       ) : (
-                        <Eye className="w-4 h-4 text-stone-500" />
+                        <Eye className="w-5 h-5 text-stone-700" />
                       )}
                     </button>
                   }
