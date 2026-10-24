@@ -30,12 +30,13 @@ function AdminLoginForm() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/admin';
   const { setUser, logout } = useAuthStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [accessDeniedMessage, setAccessDeniedMessage] = useState<string | null>(null);
 
   const {
-    register,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -47,17 +48,19 @@ function AdminLoginForm() {
     },
   });
 
-  const onSubmit = async (data: LoginInput) => {
+  const performLogin = async (loginEmail: string, loginPass: string) => {
     try {
       setIsLoading(true);
       setAccessDeniedMessage(null);
 
-      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/login', data);
+      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/login', {
+        email: loginEmail,
+        password: loginPass,
+      });
       const authenticatedUser = res.data.user;
 
       // STRICT ADMIN ENFORCEMENT
       if (authenticatedUser.role !== UserRole.ADMIN) {
-        // Immediately revoke session for non-admins attempting to use the admin portal
         await logout();
         setAccessDeniedMessage(
           `Access Denied: Account '${authenticatedUser.email}' is registered as an ${authenticatedUser.role}. This portal is strictly restricted to Platform Administrators. Please sign in via the Attendee & Organizer Portal.`
@@ -72,12 +75,30 @@ function AdminLoginForm() {
 
       setUser(authenticatedUser);
       toast.success(`Welcome to Admin Console, ${authenticatedUser.name}!`);
-      router.push(redirect);
+      window.location.href = redirect;
     } catch (err: any) {
       toast.error(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleAutofill = (autoSubmit = false) => {
+    const demoEmail = 'admin@eventra.com';
+    const demoPass = 'AdminPassword123!';
+    setEmail(demoEmail);
+    setPassword(demoPass);
+    setValue('email', demoEmail, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+    setValue('password', demoPass, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+    toast.success('Admin credentials autofilled!');
+
+    if (autoSubmit) {
+      performLogin(demoEmail, demoPass);
+    }
+  };
+
+  const onSubmit = async () => {
+    await performLogin(email, password);
   };
 
   return (
@@ -123,24 +144,33 @@ function AdminLoginForm() {
         )}
 
         {/* Admin Demo Credentials Quick-Fill (Fast Evaluation) */}
-        <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
           <div className="flex items-center gap-2.5">
             <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
             <div className="text-left">
               <p className="text-xs font-bold text-amber-300">Admin Demo Credentials</p>
-              <p className="text-[11px] text-stone-300 font-mono">admin@eventra.com • AdminPassword123!</p>
+              <p className="text-[12px] text-stone-200 font-mono">admin@eventra.com • AdminPassword123!</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              setValue('email', 'admin@eventra.com', { shouldValidate: true });
-              setValue('password', 'AdminPassword123!', { shouldValidate: true });
-            }}
-            className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-xs font-semibold text-amber-300 hover:text-white transition-colors"
-          >
-            Autofill
-          </button>
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <button
+              type="button"
+              id="admin-autofill-btn"
+              onClick={() => handleAutofill(false)}
+              className="px-3 py-1.5 rounded-xl bg-amber-500/25 hover:bg-amber-500/40 border border-amber-500/50 text-xs font-semibold text-amber-200 hover:text-white transition-all cursor-pointer"
+            >
+              Autofill
+            </button>
+            <button
+              type="button"
+              id="admin-oneclick-login-btn"
+              onClick={() => handleAutofill(true)}
+              disabled={isLoading}
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-brand-500 hover:from-amber-600 hover:to-brand-600 text-xs font-bold text-white shadow-md transition-all cursor-pointer disabled:opacity-50"
+            >
+              1-Click Sign In
+            </button>
+          </div>
         </div>
 
         {/* Admin Login Card */}
@@ -153,10 +183,15 @@ function AdminLoginForm() {
                 </label>
                 <Input
                   type="email"
-                  placeholder="admin@eventra.com"
+                  id="admin-email-field"
+                  placeholder="e.g. admin@eventra.com"
                   error={errors.email?.message}
-                  className="bg-white/90 border-stone-300"
-                  {...register('email')}
+                  className="bg-white border-stone-300 text-stone-900 font-medium placeholder:text-stone-400 shadow-sm"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setValue('email', e.target.value, { shouldValidate: true, shouldDirty: true });
+                  }}
                 />
               </div>
 
@@ -174,9 +209,15 @@ function AdminLoginForm() {
                 </div>
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
+                  id="admin-password-field"
+                  placeholder="Enter admin password"
                   error={errors.password?.message}
-                  className="bg-white/90 border-stone-300 text-stone-900"
+                  className="bg-white border-stone-300 text-stone-900 font-medium placeholder:text-stone-400 shadow-sm"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setValue('password', e.target.value, { shouldValidate: true, shouldDirty: true });
+                  }}
                   rightElement={
                     <button
                       type="button"
@@ -192,7 +233,6 @@ function AdminLoginForm() {
                       )}
                     </button>
                   }
-                  {...register('password')}
                 />
               </div>
 
@@ -202,7 +242,7 @@ function AdminLoginForm() {
                   variant="primary"
                   size="lg"
                   isLoading={isLoading}
-                  className="w-full text-base font-bold shadow-lg gap-2 bg-gradient-to-r from-amber-500 to-brand-500 hover:from-amber-600 hover:to-brand-600 text-white border-0"
+                  className="w-full text-base font-bold shadow-lg gap-2 bg-gradient-to-r from-amber-500 to-brand-500 hover:from-amber-600 hover:to-brand-600 text-white border-0 cursor-pointer"
                 >
                   <ShieldCheck className="w-5 h-5" />
                   <span>Authenticate as Admin</span>

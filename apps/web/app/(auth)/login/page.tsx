@@ -21,12 +21,14 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '';
   const { setUser } = useAuthStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
-    register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema),
@@ -36,10 +38,13 @@ function LoginForm() {
     },
   });
 
-  const onSubmit = async (data: LoginInput) => {
+  const performLogin = async (loginEmail: string, loginPass: string) => {
     try {
       setIsLoading(true);
-      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/login', data);
+      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/login', {
+        email: loginEmail,
+        password: loginPass,
+      });
       if (res.data?.accessToken && typeof window !== 'undefined') {
         localStorage.setItem('eventra_access_token', res.data.accessToken);
       }
@@ -47,15 +52,29 @@ function LoginForm() {
       toast.success(`Welcome back, ${res.data.user.name}!`);
 
       if (redirect) {
-        router.push(redirect);
+        window.location.href = redirect;
       } else {
-        router.push('/');
+        window.location.href = '/';
       }
     } catch (err: any) {
       toast.error(err.message || 'Invalid credentials');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleFillDemo = (role: 'attendee' | 'organizer') => {
+    const demoEmail = role === 'attendee' ? 'attendee@eventra.com' : 'organizer@eventra.com';
+    const demoPass = role === 'attendee' ? 'AttendeePassword123!' : 'OrganizerPassword123!';
+    setEmail(demoEmail);
+    setPassword(demoPass);
+    setValue('email', demoEmail, { shouldValidate: true, shouldDirty: true });
+    setValue('password', demoPass, { shouldValidate: true, shouldDirty: true });
+    toast.success(`${role.charAt(0).toUpperCase() + role.slice(1)} demo credentials filled!`);
+  };
+
+  const onSubmit = async () => {
+    await performLogin(email, password);
   };
 
   return (
@@ -73,6 +92,30 @@ function LoginForm() {
           </p>
         </div>
 
+        {/* Demo Credentials Quick-Fill */}
+        <div className="p-3 rounded-2xl bg-brand-50 border border-brand-200/80 flex items-center justify-between text-xs">
+          <div>
+            <p className="font-bold text-brand-900">Demo Accounts</p>
+            <p className="text-[11px] text-brand-700">Quick-fill attendee or organizer</p>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => handleFillDemo('attendee')}
+              className="px-2.5 py-1 rounded-lg bg-white border border-brand-300 text-[11px] font-semibold text-brand-700 hover:bg-brand-50 transition-colors shadow-2xs"
+            >
+              Attendee
+            </button>
+            <button
+              type="button"
+              onClick={() => handleFillDemo('organizer')}
+              className="px-2.5 py-1 rounded-lg bg-white border border-brand-300 text-[11px] font-semibold text-brand-700 hover:bg-brand-50 transition-colors shadow-2xs"
+            >
+              Organizer
+            </button>
+          </div>
+        </div>
+
         {/* Login Form */}
         <Card className="border-stone-200 shadow-md">
           <CardContent className="p-6">
@@ -82,7 +125,11 @@ function LoginForm() {
                 type="email"
                 placeholder="you@example.com"
                 error={errors.email?.message}
-                {...register('email')}
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setValue('email', e.target.value, { shouldValidate: true, shouldDirty: true });
+                }}
               />
 
               <div>
@@ -101,6 +148,11 @@ function LoginForm() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   error={errors.password?.message}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setValue('password', e.target.value, { shouldValidate: true, shouldDirty: true });
+                  }}
                   rightElement={
                     <button
                       type="button"
@@ -116,7 +168,6 @@ function LoginForm() {
                       )}
                     </button>
                   }
-                  {...register('password')}
                 />
               </div>
 
