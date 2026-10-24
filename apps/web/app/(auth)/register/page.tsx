@@ -38,7 +38,10 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterInput) => {
     try {
       setIsLoading(true);
-      const res = await api.post<{ data: { user: any } }>('/auth/register', data);
+      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/register', data);
+      if (res.data?.accessToken && typeof window !== 'undefined') {
+        localStorage.setItem('eventra_access_token', res.data.accessToken);
+      }
       setUser(res.data.user);
       toast.success('Account created! A verification code has been sent to your email.');
       router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);

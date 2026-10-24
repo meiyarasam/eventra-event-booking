@@ -39,7 +39,10 @@ function LoginForm() {
   const onSubmit = async (data: LoginInput) => {
     try {
       setIsLoading(true);
-      const res = await api.post<{ data: { user: any } }>('/auth/login', data);
+      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/login', data);
+      if (res.data?.accessToken && typeof window !== 'undefined') {
+        localStorage.setItem('eventra_access_token', res.data.accessToken);
+      }
       setUser(res.data.user);
       toast.success(`Welcome back, ${res.data.user.name}!`);
 

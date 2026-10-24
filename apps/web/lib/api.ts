@@ -60,6 +60,14 @@ export async function apiClient<T = any>(
     headers.set('Content-Type', 'application/json');
   }
 
+  // Attach stored access token if present
+  if (typeof window !== 'undefined' && !headers.has('Authorization')) {
+    const token = localStorage.getItem('eventra_access_token');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+  }
+
   const config: RequestInit = {
     ...options,
     headers,
@@ -86,6 +94,10 @@ export async function apiClient<T = any>(
           });
 
           if (refreshRes.ok) {
+            const refreshData = await refreshRes.json();
+            if (refreshData?.data?.accessToken && typeof window !== 'undefined') {
+              localStorage.setItem('eventra_access_token', refreshData.data.accessToken);
+            }
             processQueue(null);
             isRefreshing = false;
             // Retry original request

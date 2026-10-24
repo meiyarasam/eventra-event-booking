@@ -42,6 +42,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch {
       // Ignore logout errors
     } finally {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('eventra_access_token');
+      }
       set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },

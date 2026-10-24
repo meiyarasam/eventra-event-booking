@@ -52,7 +52,7 @@ function AdminLoginForm() {
       setIsLoading(true);
       setAccessDeniedMessage(null);
 
-      const res = await api.post<{ data: { user: any } }>('/auth/login', data);
+      const res = await api.post<{ data: { user: any; accessToken?: string } }>('/auth/login', data);
       const authenticatedUser = res.data.user;
 
       // STRICT ADMIN ENFORCEMENT
@@ -64,6 +64,10 @@ function AdminLoginForm() {
         );
         toast.error('Access Denied: Administrator role required.');
         return;
+      }
+
+      if (res.data?.accessToken && typeof window !== 'undefined') {
+        localStorage.setItem('eventra_access_token', res.data.accessToken);
       }
 
       setUser(authenticatedUser);

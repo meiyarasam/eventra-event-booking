@@ -6,15 +6,30 @@ declare global {
   var prismaGlobal: PrismaClient | undefined;
 }
 
-export const prisma =
-  global.prismaGlobal ||
-  new PrismaClient({
-    log: env.isProduction ? ['error', 'warn'] : ['error', 'warn'],
-  });
+let prismaInstance: PrismaClient;
 
-if (!env.isProduction) {
-  global.prismaGlobal = prisma;
+try {
+  prismaInstance =
+    global.prismaGlobal ||
+    new PrismaClient({
+      log: env.isProduction ? ['error', 'warn'] : ['error', 'warn'],
+    });
+
+  if (!env.isProduction) {
+    global.prismaGlobal = prismaInstance;
+  }
+} catch (error) {
+  console.warn('⚠️ Prisma Client initialization warning:', (error as Error).message);
+  prismaInstance = new Proxy({} as PrismaClient, {
+    get: (_target, prop) => {
+      if (prop === '$connect') return async () => { throw new Error('Database not connected'); };
+      if (prop === '$disconnect') return async () => {};
+      return () => { throw new Error('Database not connected'); };
+    },
+  });
 }
+
+export const prisma = prismaInstance;
 
 export let isDatabaseConnected = false;
 
