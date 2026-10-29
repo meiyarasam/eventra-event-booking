@@ -5,7 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "prisma generate && tsc",
+    "build:shared": "npm --prefix ../../packages/shared run build",
+    "prebuild": "npm --prefix ../../packages/shared run build",
+    "build": "npm --prefix ../../packages/shared run build && prisma generate && tsc",
     "start": "node dist/server.js",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
     "db:generate": "prisma generate",
