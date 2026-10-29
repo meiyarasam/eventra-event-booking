@@ -9,6 +9,8 @@ export class AuthController {
       const result = await authService.register(req.body);
       setAuthCookies(res, result.accessToken, result.refreshToken);
 
+      // FIX BUG-003: devOtp and devVerificationToken are only included in non-production responses.
+      const isDev = process.env.NODE_ENV !== 'production';
       res.status(201).json({
         success: true,
         message: 'Account registered successfully',
@@ -16,6 +18,7 @@ export class AuthController {
           user: result.user,
           accessToken: result.accessToken,
           refreshToken: result.refreshToken,
+          ...(isDev ? { devOtp: result.devOtp, devVerificationToken: result.devVerificationToken } : {}),
         },
       });
     } catch (error) {
@@ -98,10 +101,13 @@ export class AuthController {
   async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await authService.forgotPassword(req.body.email);
+      // FIX BUG-003 & BUG-015: Only expose devToken in non-production environments.
+      // In production, always return the same response shape regardless of outcome
+      // to prevent timing/status-code based email enumeration.
       res.status(200).json({
         success: true,
         message: result.message,
-        devToken: result.devToken,
+        ...(process.env.NODE_ENV !== 'production' && result.devToken ? { devToken: result.devToken } : {}),
       });
     } catch (error) {
       next(error);

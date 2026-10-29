@@ -19,6 +19,8 @@ import {
   X,
   ChevronDown,
   Bookmark,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
@@ -29,7 +31,7 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
-  const { initTheme } = useThemeStore();
+  const { theme, toggleTheme, initTheme } = useThemeStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -120,15 +122,15 @@ export function Header() {
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
         hasScrolled
-          ? 'bg-[#0B0F19]/95 backdrop-blur-md shadow-md border-b border-slate-800'
-          : 'bg-[#0B0F19]/90 backdrop-blur-md border-b border-slate-800/60'
+          ? 'bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md shadow-sm dark:shadow-md border-b border-stone-200 dark:border-slate-800'
+          : 'bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md border-b border-stone-200/80 dark:border-slate-800/60'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo & Brand Identity */}
           <div className="flex items-center gap-8">
-            <BrandLogo size="md" theme="dark" />
+            <BrandLogo size="md" />
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1">
@@ -136,8 +138,8 @@ export function Header() {
                 href="/events"
                 className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
                   isActive('/events')
-                    ? 'text-brand-400 bg-brand-500/10 font-semibold border border-brand-500/20'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    ? 'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10 font-semibold border border-brand-200 dark:border-brand-500/20'
+                    : 'text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800/60'
                 }`}
               >
                 Explore Events
@@ -146,8 +148,8 @@ export function Header() {
                 href="/categories"
                 className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
                   isActive('/categories')
-                    ? 'text-brand-400 bg-brand-500/10 font-semibold border border-brand-500/20'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    ? 'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10 font-semibold border border-brand-200 dark:border-brand-500/20'
+                    : 'text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800/60'
                 }`}
               >
                 Categories
@@ -156,8 +158,8 @@ export function Header() {
                 href="/about"
                 className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
                   isActive('/about')
-                    ? 'text-brand-400 bg-brand-500/10 font-semibold border border-brand-500/20'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    ? 'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10 font-semibold border border-brand-200 dark:border-brand-500/20'
+                    : 'text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800/60'
                 }`}
               >
                 About
@@ -165,16 +167,30 @@ export function Header() {
             </nav>
           </div>
 
-          {/* Right Section: Auth & Role Shortcuts */}
+          {/* Right Section: Auth & Role Shortcuts & Theme Toggle */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Theme Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="p-2.5 rounded-xl text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800/80 transition-colors border border-stone-200 dark:border-slate-800/60 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-amber-400 hover:rotate-45 transition-transform" />
+              ) : (
+                <Moon className="w-5 h-5 text-indigo-500 dark:text-indigo-400 hover:-rotate-12 transition-transform" />
+              )}
+            </button>
 
             {isAuthenticated && user ? (
               <>
                 {/* Role Specific Shortcuts */}
                 {user.role === UserRole.ADMIN && (
                   <Link href="/admin">
-                    <Button variant="outline" size="sm" className="gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20">
-                      <ShieldAlert className="w-4 h-4 text-amber-400" />
+                    <Button variant="outline" size="sm" className="gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-300 hover:bg-amber-500/20">
+                      <ShieldAlert className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                       Admin Panel
                     </Button>
                   </Link>
@@ -182,8 +198,8 @@ export function Header() {
 
                 {user.role === UserRole.ORGANIZER && (
                   <Link href="/organizer">
-                    <Button variant="outline" size="sm" className="gap-1.5 border-brand-500/40 bg-brand-500/10 text-brand-300 hover:bg-brand-500/20">
-                      <Briefcase className="w-4 h-4 text-brand-400" />
+                    <Button variant="outline" size="sm" className="gap-1.5 border-brand-500/40 bg-brand-500/10 text-brand-600 dark:text-brand-300 hover:bg-brand-500/20">
+                      <Briefcase className="w-4 h-4 text-brand-500 dark:text-brand-400" />
                       Organizer Portal
                     </Button>
                   </Link>
@@ -192,7 +208,7 @@ export function Header() {
                 {/* Notifications Bell */}
                 <Link
                   href="/notifications"
-                  className="relative p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors border border-slate-800/60"
+                  className="relative p-2.5 rounded-xl text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800/80 transition-colors border border-stone-200 dark:border-slate-800/60"
                   aria-label="Notifications"
                 >
                   <Bell className="w-5 h-5" />
@@ -211,7 +227,7 @@ export function Header() {
                     aria-expanded={profileDropdownOpen}
                     aria-haspopup="true"
                     aria-label="User profile menu"
-                    className="flex items-center gap-2.5 p-1.5 pr-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800 hover:border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-slate-200"
+                    className="flex items-center gap-2.5 p-1.5 pr-3 rounded-xl border border-stone-200 dark:border-slate-800 bg-stone-50 dark:bg-slate-900/60 hover:bg-stone-100 dark:hover:bg-slate-800 hover:border-stone-300 dark:hover:border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500/20 text-stone-800 dark:text-slate-200"
                   >
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-orange-600 text-white flex items-center justify-center font-semibold text-xs overflow-hidden">
                       {user.avatarUrl ? (
@@ -221,11 +237,11 @@ export function Header() {
                         user.name.charAt(0).toUpperCase()
                       )}
                     </div>
-                    <span className="text-sm font-medium text-slate-200 max-w-[120px] truncate">
+                    <span className="text-sm font-medium text-stone-800 dark:text-slate-200 max-w-[120px] truncate">
                       {user.name}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                      className={`w-4 h-4 text-stone-400 dark:text-slate-400 transition-transform duration-200 ${
                         profileDropdownOpen ? 'rotate-180' : ''
                       }`}
                     />
@@ -235,13 +251,13 @@ export function Header() {
                     <div
                       role="menu"
                       aria-orientation="vertical"
-                      className="absolute right-0 mt-2 w-56 bg-[#111827] rounded-2xl border border-slate-800 shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 text-slate-200"
+                      className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#111827] rounded-2xl border border-stone-200 dark:border-slate-800 shadow-xl dark:shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 text-stone-800 dark:text-slate-200"
                     >
-                      <div className="px-4 py-2 border-b border-slate-800">
-                        <div className="text-sm font-semibold text-white">{user.name}</div>
-                        <div className="text-xs text-slate-400 truncate">{user.email}</div>
+                      <div className="px-4 py-2 border-b border-stone-100 dark:border-slate-800">
+                        <div className="text-sm font-semibold text-stone-900 dark:text-white">{user.name}</div>
+                        <div className="text-xs text-stone-500 dark:text-slate-400 truncate">{user.email}</div>
                         <div className="mt-1">
-                          <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-800 text-brand-300 uppercase tracking-wider border border-slate-700">
+                          <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-stone-100 dark:bg-slate-800 text-brand-600 dark:text-brand-300 uppercase tracking-wider border border-stone-200 dark:border-slate-700">
                             {user.role}
                           </span>
                         </div>
@@ -252,9 +268,9 @@ export function Header() {
                           <Link
                             href="/admin"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-amber-400 hover:bg-slate-800 transition-colors"
+                            className="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-stone-50 dark:hover:bg-slate-800 transition-colors"
                           >
-                            <ShieldAlert className="w-4 h-4 text-amber-400" />
+                            <ShieldAlert className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                             Admin Console
                           </Link>
                         )}
@@ -262,61 +278,61 @@ export function Header() {
                           <Link
                             href="/organizer"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-brand-400 hover:bg-slate-800 transition-colors"
+                            className="flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-brand-600 dark:text-brand-400 hover:bg-stone-50 dark:hover:bg-slate-800 transition-colors"
                           >
-                            <Briefcase className="w-4 h-4 text-brand-400" />
+                            <Briefcase className="w-4 h-4 text-brand-500 dark:text-brand-400" />
                             Organizer Portal
                           </Link>
                         )}
                         <Link
                           href="/attendee"
                           onClick={() => setProfileDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition-colors"
                         >
-                          <Compass className="w-4 h-4 text-slate-400" />
+                          <Compass className="w-4 h-4 text-stone-400 dark:text-slate-400" />
                           Attendee Dashboard
                         </Link>
                         <Link
                           href="/bookings"
                           onClick={() => setProfileDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition-colors"
                         >
-                          <Calendar className="w-4 h-4 text-slate-400" />
+                          <Calendar className="w-4 h-4 text-stone-400 dark:text-slate-400" />
                           My Bookings
                         </Link>
                         <Link
                           href="/tickets"
                           onClick={() => setProfileDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition-colors"
                         >
-                          <Ticket className="w-4 h-4 text-slate-400" />
+                          <Ticket className="w-4 h-4 text-stone-400 dark:text-slate-400" />
                           My Tickets & Passes
                         </Link>
                         <Link
                           href="/saved"
                           onClick={() => setProfileDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition-colors"
                         >
-                          <Bookmark className="w-4 h-4 text-slate-400" />
+                          <Bookmark className="w-4 h-4 text-stone-400 dark:text-slate-400" />
                           Saved Events
                         </Link>
                         <Link
                           href="/profile"
                           onClick={() => setProfileDropdownOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-stone-900 dark:hover:text-white transition-colors"
                         >
-                          <User className="w-4 h-4 text-slate-400" />
+                          <User className="w-4 h-4 text-stone-400 dark:text-slate-400" />
                           Profile Settings
                         </Link>
                       </div>
 
-                      <div className="border-t border-slate-800 pt-1">
+                      <div className="border-t border-stone-100 dark:border-slate-800 pt-1">
                         <button
                           type="button"
                           onClick={handleLogout}
-                          className="flex items-center gap-2.5 w-full text-left px-4 py-2 text-sm text-rose-400 hover:bg-slate-800 transition-colors"
+                          className="flex items-center gap-2.5 w-full text-left px-4 py-2 text-sm text-rose-600 dark:text-rose-400 hover:bg-stone-50 dark:hover:bg-slate-800 transition-colors"
                         >
-                          <LogOut className="w-4 h-4 text-rose-400" />
+                          <LogOut className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                           Sign Out
                         </button>
                       </div>
@@ -327,7 +343,7 @@ export function Header() {
             ) : (
               <div className="flex items-center gap-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="font-semibold text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Button variant="ghost" size="sm" className="font-semibold text-stone-700 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800">
                     Sign In
                   </Button>
                 </Link>
@@ -340,10 +356,24 @@ export function Header() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-2">
+          {/* Mobile Menu & Theme Button */}
+          <div className="flex md:hidden items-center gap-1.5">
+            {/* Mobile Theme Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="p-2 text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white rounded-lg focus:outline-none"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-amber-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+              )}
+            </button>
+
             {isAuthenticated && (
-              <Link href="/notifications" className="relative p-2 text-slate-300">
+              <Link href="/notifications" className="relative p-2 text-stone-600 dark:text-slate-300">
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
                   <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-brand-500" />
@@ -352,7 +382,7 @@ export function Header() {
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-300 hover:text-white rounded-lg"
+              className="p-2 text-stone-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white rounded-lg"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -362,59 +392,59 @@ export function Header() {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-slate-800 space-y-2 bg-[#0B0F19]">
+          <div className="md:hidden py-4 border-t border-stone-200 dark:border-slate-800 space-y-2 bg-white dark:bg-[#0B0F19]">
             <Link
               href="/events"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="block px-3 py-2 rounded-lg text-base font-medium text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
             >
               Explore Events
             </Link>
             <Link
               href="/categories"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="block px-3 py-2 rounded-lg text-base font-medium text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
             >
               Categories
             </Link>
             <Link
               href="/about"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="block px-3 py-2 rounded-lg text-base font-medium text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
             >
               About
             </Link>
 
             {isAuthenticated && user ? (
-              <div className="pt-4 border-t border-slate-800 space-y-2">
-                <div className="px-3 py-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <div className="pt-4 border-t border-stone-200 dark:border-slate-800 space-y-2">
+                <div className="px-3 py-1 text-xs font-semibold text-stone-500 dark:text-slate-400 uppercase tracking-wider">
                   Signed in as {user.name} ({user.role})
                 </div>
                 <Link
                   href="/attendee"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="block px-3 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
                 >
                   Attendee Dashboard
                 </Link>
                 <Link
                   href="/bookings"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="block px-3 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
                 >
                   My Bookings
                 </Link>
                 <Link
                   href="/tickets"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="block px-3 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
                 >
                   My Tickets
                 </Link>
                 <Link
                   href="/saved"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-sm text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="block px-3 py-2 text-sm text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 hover:text-navy-950 dark:hover:text-white"
                 >
                   Saved Events
                 </Link>
@@ -422,7 +452,7 @@ export function Header() {
                   <Link
                     href="/organizer"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 text-sm text-brand-400 font-medium hover:bg-slate-800"
+                    className="block px-3 py-2 text-sm text-brand-600 dark:text-brand-400 font-medium hover:bg-stone-100 dark:hover:bg-slate-800"
                   >
                     Organizer Portal
                   </Link>
@@ -431,7 +461,7 @@ export function Header() {
                   <Link
                     href="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 text-sm text-amber-400 font-medium hover:bg-slate-800"
+                    className="block px-3 py-2 text-sm text-amber-600 dark:text-amber-400 font-medium hover:bg-stone-100 dark:hover:bg-slate-800"
                   >
                     Admin Panel
                   </Link>
@@ -441,13 +471,13 @@ export function Header() {
                     handleLogout();
                     setMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-2 text-sm text-rose-400 hover:bg-slate-800"
+                  className="block w-full text-left px-3 py-2 text-sm text-rose-600 dark:text-rose-400 hover:bg-stone-100 dark:hover:bg-slate-800"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <div className="pt-4 border-t border-stone-200 flex flex-col gap-2">
+              <div className="pt-4 border-t border-stone-200 dark:border-slate-800 flex flex-col gap-2">
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="outline" className="w-full">
                     Sign In

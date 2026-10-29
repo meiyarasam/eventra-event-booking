@@ -52,21 +52,21 @@ export default function ChangePasswordPage() {
       <div>
         <Link
           href="/profile"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Profile Overview</span>
         </Link>
-        <h1 className="font-serif text-3xl font-bold text-navy-950">Change Password</h1>
-        <p className="text-sm text-stone-500 mt-1">
+        <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Change Password</h1>
+        <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
           Keep your EVENTRA account secure by using a strong, unique password.
         </p>
       </div>
 
-      <Card className="border-stone-200 shadow-sm">
-        <CardHeader className="border-b border-stone-100">
+      <Card className="border-stone-200 dark:border-slate-800 shadow-sm">
+        <CardHeader className="border-b border-stone-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-brand-600" />
+            <ShieldCheck className="w-5 h-5 text-brand-600 dark:text-brand-400" />
             <CardTitle className="text-lg">Security Credentials</CardTitle>
           </div>
         </CardHeader>
@@ -100,7 +100,7 @@ export default function ChangePasswordPage() {
               required
             />
 
-            <div className="pt-4 flex items-center justify-end gap-3 border-t border-stone-100">
+            <div className="pt-4 flex items-center justify-end gap-3 border-t border-stone-100 dark:border-slate-800">
               <Link href="/profile">
                 <Button variant="outline" type="button">
                   Cancel

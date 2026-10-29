@@ -51,15 +51,15 @@ export default function AdminCategoriesPage() {
       <div>
         <Link
           href="/admin"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-2 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Admin Dashboard</span>
         </Link>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-navy-950">Category Management</h1>
-            <p className="text-sm text-stone-500 mt-1">
+            <h1 className="font-serif text-3xl font-bold text-slate-900 dark:text-white">Category Management</h1>
+            <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
               Curate and configure discovery taxonomies across music, technology, conferences, and workshops.
             </p>
           </div>
@@ -77,16 +77,16 @@ export default function AdminCategoriesPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((n) => (
-            <div key={n} className="h-40 bg-stone-200 animate-pulse rounded-2xl" />
+            <div key={n} className="h-40 bg-stone-200 dark:bg-slate-800 animate-pulse rounded-2xl" />
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((cat) => (
-            <Card key={cat.id} className="border-stone-200 hover:border-brand-400 transition-all shadow-sm">
+            <Card key={cat.id} className="border-stone-200 dark:border-slate-800 bg-white dark:bg-[#111827] hover:border-brand-400 transition-all shadow-sm">
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-start justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-600 dark:text-brand-400">
                     <FolderOpen className="w-6 h-6" />
                   </div>
                   <Badge variant="brand" className="text-[10px] font-mono">
@@ -95,19 +95,19 @@ export default function AdminCategoriesPage() {
                 </div>
 
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-stone-900">{cat.name}</h3>
-                  <p className="text-xs text-stone-500 mt-1 line-clamp-2">
+                  <h3 className="font-serif text-lg font-bold text-stone-900 dark:text-white">{cat.name}</h3>
+                  <p className="text-xs text-stone-500 dark:text-slate-400 mt-1 line-clamp-2">
                     {cat.description || 'Explore curated events under this topic.'}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                  <span className="font-semibold text-stone-700">
+                <div className="pt-3 border-t border-stone-100 dark:border-slate-800 flex items-center justify-between text-xs text-stone-500 dark:text-slate-400">
+                  <span className="font-semibold text-stone-700 dark:text-slate-200">
                     {cat._count?.events || 0} Listed Events
                   </span>
                   <Link
                     href={`/events?category=${cat.slug}`}
-                    className="text-brand-600 font-semibold hover:underline"
+                    className="text-brand-600 dark:text-brand-400 font-semibold hover:underline"
                   >
                     View Public Feed →
                   </Link>

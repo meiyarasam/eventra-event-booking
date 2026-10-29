@@ -75,8 +75,16 @@ export class AdminService {
           grossVolume: Number(revenueResult._sum.totalAmount || 0),
         },
         categoryDistribution: categoriesWithCounts.map((c) => ({
+          id: c.id,
           name: c.name,
           count: c._count.events,
+          eventsCount: c._count.events,
+        })),
+        categories: categoriesWithCounts.map((c) => ({
+          id: c.id,
+          name: c.name,
+          count: c._count.events,
+          eventsCount: c._count.events,
         })),
         recentUsers: recentUsers.map((u) => ({
           ...u,

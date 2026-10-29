@@ -51,73 +51,118 @@ export class UsersService {
   }
 
   async updateProfile(userId: string, input: UpdateProfileInput) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: { profile: true },
-    });
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        include: { profile: true },
+      });
 
-    if (!user) {
-      throw AppError.notFound('User not found');
-    }
+      if (!user) {
+        throw AppError.notFound('User not found');
+      }
 
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        ...(input.name ? { name: input.name } : {}),
-        profile: {
-          upsert: {
-            create: {
-              phone: input.phone,
-              bio: input.bio,
-              avatarUrl: input.avatarUrl,
-            },
-            update: {
-              phone: input.phone,
-              bio: input.bio,
-              avatarUrl: input.avatarUrl,
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          ...(input.name ? { name: input.name } : {}),
+          profile: {
+            upsert: {
+              create: {
+                phone: input.phone,
+                bio: input.bio,
+                avatarUrl: input.avatarUrl,
+              },
+              update: {
+                phone: input.phone,
+                bio: input.bio,
+                avatarUrl: input.avatarUrl,
+              },
             },
           },
         },
-      },
-      include: { profile: true },
-    });
+        include: { profile: true },
+      });
 
-    return {
-      id: updatedUser.id,
-      email: updatedUser.email,
-      name: updatedUser.name,
-      role: updatedUser.role,
-      status: updatedUser.status,
-      avatarUrl: updatedUser.profile?.avatarUrl || null,
-      phone: updatedUser.profile?.phone || null,
-      bio: updatedUser.profile?.bio || null,
-      createdAt: updatedUser.createdAt.toISOString(),
-    };
+      return {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        role: updatedUser.role,
+        status: updatedUser.status,
+        avatarUrl: updatedUser.profile?.avatarUrl || null,
+        phone: updatedUser.profile?.phone || null,
+        bio: updatedUser.profile?.bio || null,
+        createdAt: updatedUser.createdAt.toISOString(),
+      };
+    } catch (error) {
+      // FIX BUG-005: Handle DB connection failure with fallback store update.
+      if (isPrismaConnectionError(error)) {
+        const fbUser = devFallbackStore.users.find((u) => u.id === userId);
+        if (!fbUser) {
+          throw AppError.notFound('User not found');
+        }
+        if (input.name) fbUser.name = input.name;
+        if (fbUser.profile === undefined) fbUser.profile = {};
+        if (input.phone !== undefined) fbUser.profile.phone = input.phone ?? null;
+        if (input.bio !== undefined) fbUser.profile.bio = input.bio ?? null;
+        if (input.avatarUrl !== undefined) fbUser.profile.avatarUrl = input.avatarUrl ?? null;
+        return {
+          id: fbUser.id,
+          email: fbUser.email,
+          name: fbUser.name,
+          role: fbUser.role,
+          status: fbUser.status,
+          avatarUrl: fbUser.profile?.avatarUrl || null,
+          phone: fbUser.profile?.phone || null,
+          bio: fbUser.profile?.bio || null,
+          createdAt: fbUser.createdAt instanceof Date ? fbUser.createdAt.toISOString() : new Date().toISOString(),
+        };
+      }
+      throw error;
+    }
   }
 
   async changePassword(userId: string, input: ChangePasswordInput) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
 
-    if (!user) {
-      throw AppError.notFound('User not found');
+      if (!user) {
+        throw AppError.notFound('User not found');
+      }
+
+      const isMatch = await bcrypt.compare(input.currentPassword, user.passwordHash);
+      if (!isMatch) {
+        throw AppError.badRequest('Current password is incorrect');
+      }
+
+      const salt = await bcrypt.genSalt(12);
+      const passwordHash = await bcrypt.hash(input.newPassword, salt);
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash },
+      });
+
+      return { message: 'Password updated successfully' };
+    } catch (error) {
+      // FIX BUG-005: Handle DB connection failure with fallback store update.
+      if (isPrismaConnectionError(error)) {
+        const fbUser = devFallbackStore.users.find((u) => u.id === userId);
+        if (!fbUser) {
+          throw AppError.notFound('User not found');
+        }
+        const isMatch = await bcrypt.compare(input.currentPassword, fbUser.passwordHash);
+        if (!isMatch) {
+          throw AppError.badRequest('Current password is incorrect');
+        }
+        const salt = await bcrypt.genSalt(10);
+        fbUser.passwordHash = await bcrypt.hash(input.newPassword, salt);
+        return { message: 'Password updated successfully' };
+      }
+      throw error;
     }
-
-    const isMatch = await bcrypt.compare(input.currentPassword, user.passwordHash);
-    if (!isMatch) {
-      throw AppError.badRequest('Current password is incorrect');
-    }
-
-    const salt = await bcrypt.genSalt(12);
-    const passwordHash = await bcrypt.hash(input.newPassword, salt);
-
-    await prisma.user.update({
-      where: { id: userId },
-      data: { passwordHash },
-    });
-
-    return { message: 'Password updated successfully' };
   }
 
   async submitOrganizerRequest(userId: string, input: OrganizerRequestInput) {

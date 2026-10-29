@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  theme?: 'light' | 'dark';
+  theme?: 'light' | 'dark' | 'auto';
   showSubtitle?: boolean;
   link?: boolean;
   className?: string;
@@ -102,7 +102,7 @@ export function BrandLogoIcon({
 
 export function BrandLogo({
   size = 'md',
-  theme = 'light',
+  theme = 'auto',
   showSubtitle = true,
   link = true,
   className = '',
@@ -144,8 +144,18 @@ export function BrandLogo({
     },
   }[size];
 
-  const textColor = theme === 'dark' ? 'text-white' : 'text-[#0B132B]';
-  const subColor = theme === 'dark' ? 'text-slate-400' : 'text-[#4A5568]';
+  const textColor =
+    theme === 'dark'
+      ? 'text-white'
+      : theme === 'light'
+      ? 'text-[#0B132B]'
+      : 'text-navy-950 dark:text-white';
+  const subColor =
+    theme === 'dark'
+      ? 'text-slate-400'
+      : theme === 'light'
+      ? 'text-[#4A5568]'
+      : 'text-stone-500 dark:text-slate-400';
 
   const content = (
     <div

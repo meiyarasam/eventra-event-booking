@@ -78,34 +78,34 @@ export default function UniversalOrganizerCheckInPage() {
       <div>
         <Link
           href="/organizer"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-2 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Organizer Dashboard</span>
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-navy-950">Gate QR Check-In Scanner</h1>
-            <p className="text-sm text-stone-500 mt-1">
+            <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Gate QR Check-In Scanner</h1>
+            <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
               Verify and atomically mark attendee passes as checked-in at entrance gates.
             </p>
           </div>
           <Badge variant="brand" className="gap-1.5 text-xs font-bold uppercase tracking-wider py-1 px-3">
-            <ShieldCheck className="w-4 h-4 text-brand-600" />
+            <ShieldCheck className="w-4 h-4 text-brand-600 dark:text-brand-400" />
             <span>Staff Scanner Mode</span>
           </Badge>
         </div>
       </div>
 
       {/* Main Scanner Box */}
-      <Card className="border-stone-200 shadow-lg overflow-hidden">
-        <div className="bg-navy-950 p-8 text-center text-white relative">
+      <Card className="border-stone-200 dark:border-slate-800 shadow-lg overflow-hidden">
+        <div className="bg-navy-950 dark:bg-slate-900 p-8 text-center text-white relative">
           <div className="w-24 h-24 rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center mx-auto mb-4 relative">
             <Scan className="w-12 h-12 text-brand-400 animate-pulse" />
             <div className="absolute inset-0 rounded-3xl border-2 border-brand-500 animate-ping opacity-20 pointer-events-none" />
           </div>
           <h2 className="font-serif text-xl font-bold">Ready to Scan Passes</h2>
-          <p className="text-xs text-stone-400 max-w-md mx-auto mt-1">
+          <p className="text-xs text-stone-400 dark:text-slate-400 max-w-md mx-auto mt-1">
             Aim optical scanner at attendee QR code or paste / enter the unique ticket reference number below.
           </p>
         </div>
@@ -139,10 +139,10 @@ export default function UniversalOrganizerCheckInPage() {
             <div
               className={`p-6 rounded-2xl border transition-all ${
                 scanResult.status === 'VALID'
-                  ? 'bg-emerald-50 border-emerald-300 text-emerald-950'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-200'
                   : scanResult.status === 'ALREADY_CHECKED_IN'
-                  ? 'bg-amber-50 border-amber-300 text-amber-950'
-                  : 'bg-rose-50 border-rose-300 text-rose-950'
+                  ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-800 text-amber-950 dark:text-amber-200'
+                  : 'bg-rose-50 dark:bg-rose-950/30 border-rose-300 dark:border-rose-900/60 text-rose-950 dark:text-rose-200'
               }`}
             >
               <div className="flex items-start gap-4">
@@ -189,7 +189,7 @@ export default function UniversalOrganizerCheckInPage() {
                   <p className="text-xs opacity-90">{scanResult.message}</p>
 
                   {scanResult.ticket && (
-                    <div className="pt-3 mt-3 border-t border-black/10 text-xs space-y-1 font-sans">
+                    <div className="pt-3 mt-3 border-t border-black/10 dark:border-white/10 text-xs space-y-1 font-sans">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold">Attendee:</span>
                         <span>{scanResult.ticket.attendeeName || 'Registered Attendee'}</span>
@@ -207,7 +207,7 @@ export default function UniversalOrganizerCheckInPage() {
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-black/10 flex justify-end">
+              <div className="mt-4 pt-3 border-t border-black/10 dark:border-white/10 flex justify-end">
                 <Button variant="outline" size="sm" onClick={resetScanner} className="gap-1.5 text-xs">
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Scan Next Attendee</span>

@@ -185,6 +185,7 @@ export default function AdminEventsManagementPage() {
     onSuccess: (_, variables) => {
       toast.success(`Event status changed to ${variables.status}.`);
       queryClient.invalidateQueries({ queryKey: ['admin-all-events'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-overview'] });
       queryClient.invalidateQueries({ queryKey: ['events'] });
       refetchAll();
     },
@@ -200,6 +201,7 @@ export default function AdminEventsManagementPage() {
       toast.success(res.message || 'Event permanently removed.');
       setDeletingEvent(null);
       queryClient.invalidateQueries({ queryKey: ['admin-all-events'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-overview'] });
       queryClient.invalidateQueries({ queryKey: ['events'] });
       refetchAll();
     },
@@ -221,6 +223,7 @@ export default function AdminEventsManagementPage() {
       setIsFormOpen(false);
       setEditingEvent(null);
       queryClient.invalidateQueries({ queryKey: ['admin-all-events'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-overview'] });
       queryClient.invalidateQueries({ queryKey: ['events'] });
       refetchAll();
     },
@@ -246,6 +249,7 @@ export default function AdminEventsManagementPage() {
       setRejectionReason('');
       queryClient.invalidateQueries({ queryKey: ['admin-pending-events'] });
       queryClient.invalidateQueries({ queryKey: ['admin-all-events'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-overview'] });
       refetchPending();
       refetchAll();
     },
@@ -394,42 +398,42 @@ export default function AdminEventsManagementPage() {
     switch (status) {
       case 'PUBLISHED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800/60">
+            <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>Published</span>
           </span>
         );
       case 'DRAFT':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-stone-100 text-stone-700 border border-stone-300">
-            <Clock className="w-3.5 h-3.5 text-stone-500" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-300 border border-stone-300 dark:border-slate-700">
+            <Clock className="w-3.5 h-3.5 text-stone-500 dark:text-slate-400" />
             <span>Draft</span>
           </span>
         );
       case 'PENDING_APPROVAL':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
-            <Clock className="w-3.5 h-3.5 text-amber-600" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60">
+            <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             <span>Pending Review</span>
           </span>
         );
       case 'APPROVED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-300">
-            <Check className="w-3.5 h-3.5 text-blue-600" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-800/60">
+            <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>Approved</span>
           </span>
         );
       case 'CANCELLED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">
-            <XCircle className="w-3.5 h-3.5 text-rose-600" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800/60">
+            <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             <span>Cancelled</span>
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-stone-100 text-stone-600">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-stone-600 dark:text-slate-400 border border-stone-200 dark:border-slate-700">
             {status}
           </span>
         );
@@ -439,24 +443,24 @@ export default function AdminEventsManagementPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-200 dark:border-slate-800">
         <div>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-2 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-2 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Admin Overview</span>
           </Link>
           <div className="flex items-center gap-3">
-            <h1 className="font-serif text-3xl font-bold text-navy-950">
+            <h1 className="font-serif text-3xl font-bold text-slate-900 dark:text-white">
               Admin Event Management
             </h1>
             <Badge variant="brand" className="text-xs font-bold px-2.5 py-0.5">
               Full Control
             </Badge>
           </div>
-          <p className="text-sm text-stone-500 mt-1">
+          <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
             Create, edit, publish, unpublish, and permanently delete any event across EVENTRA.
           </p>
         </div>
@@ -475,20 +479,20 @@ export default function AdminEventsManagementPage() {
       </div>
 
       {/* Navigation Tabs (All Events vs Moderation Queue) */}
-      <div className="flex items-center justify-between border-b border-stone-200 pb-px">
+      <div className="flex items-center justify-between border-b border-stone-200 dark:border-slate-800 pb-px">
         <div className="flex items-center gap-2 sm:gap-4">
           <button
             type="button"
             onClick={() => setActiveTab('all')}
             className={`pb-3 px-2 text-sm font-bold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'all'
-                ? 'border-brand-500 text-brand-600'
-                : 'border-transparent text-stone-500 hover:text-stone-900'
+                ? 'border-brand-500 text-brand-600 dark:text-brand-400'
+                : 'border-transparent text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
             <Layers className="w-4 h-4" />
             <span>All Platform Events</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-stone-100 text-stone-700 font-semibold">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-300 border border-stone-200 dark:border-slate-700 font-semibold">
               {meta.total || allEvents.length}
             </span>
           </button>
@@ -498,8 +502,8 @@ export default function AdminEventsManagementPage() {
             onClick={() => setActiveTab('moderation')}
             className={`pb-3 px-2 text-sm font-bold border-b-2 flex items-center gap-2 transition-colors ${
               activeTab === 'moderation'
-                ? 'border-brand-500 text-brand-600'
-                : 'border-transparent text-stone-500 hover:text-stone-900'
+                ? 'border-brand-500 text-brand-600 dark:text-brand-400'
+                : 'border-transparent text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -519,9 +523,9 @@ export default function AdminEventsManagementPage() {
       {activeTab === 'all' && (
         <div className="space-y-6">
           {/* Search & Filter Toolbar */}
-          <div className="p-4 bg-white rounded-2xl border border-stone-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="p-4 bg-white dark:bg-[#111827] rounded-2xl border border-stone-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="relative w-full md:w-80">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Search by title, city, or venue..."
@@ -530,13 +534,13 @@ export default function AdminEventsManagementPage() {
                   setSearch(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
+                className="w-full pl-10 pr-4 py-2 text-sm bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
               />
               {search && (
                 <button
                   type="button"
                   onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-400 hover:text-stone-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-400 hover:text-stone-700 dark:text-slate-400 dark:hover:text-slate-200"
                 >
                   ✕
                 </button>
@@ -546,14 +550,14 @@ export default function AdminEventsManagementPage() {
             <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
               {/* Category Filter */}
               <div className="flex items-center gap-1.5">
-                <Filter className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                <Filter className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500 shrink-0" />
                 <select
                   value={selectedCategory}
                   onChange={(e) => {
                     setSelectedCategory(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="text-xs font-semibold bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-stone-700 focus:outline-none focus:border-brand-500"
+                  className="text-xs font-semibold bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 rounded-xl px-3 py-2 text-stone-700 dark:text-slate-200 focus:outline-none focus:border-brand-500"
                 >
                   <option value="ALL">All Categories</option>
                   {categories.map((c) => (
@@ -571,7 +575,7 @@ export default function AdminEventsManagementPage() {
                   setSelectedStatus(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="text-xs font-semibold bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-stone-700 focus:outline-none focus:border-brand-500"
+                className="text-xs font-semibold bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 rounded-xl px-3 py-2 text-stone-700 dark:text-slate-200 focus:outline-none focus:border-brand-500"
               >
                 <option value="ALL">All Statuses</option>
                 <option value="PUBLISHED">Published Only</option>
@@ -590,9 +594,9 @@ export default function AdminEventsManagementPage() {
                     setSelectedStatus('ALL');
                     setCurrentPage(1);
                   }}
-                  className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1 underline ml-1"
+                  className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center gap-1 underline ml-1"
                 >
-                  <RotateCcw className="w-3 h-3" />
+                  <RotateCcw className="w-3.5 h-3.5" />
                   <span>Reset Filters</span>
                 </button>
               )}
@@ -603,12 +607,12 @@ export default function AdminEventsManagementPage() {
           {isLoadingAll ? (
             <div className="space-y-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-32 bg-stone-100 rounded-2xl animate-pulse" />
+                <div key={i} className="h-32 bg-stone-100 dark:bg-slate-800 rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : allEvents.length === 0 ? (
             <EmptyState
-              icon={<Calendar className="w-12 h-12 text-stone-400" />}
+              icon={<Calendar className="w-12 h-12 text-stone-400 dark:text-slate-500" />}
               title="No events match your criteria"
               description="Try adjusting your search filters or click 'Add New Event' to create one now."
               actionText="Create First Event"
@@ -626,13 +630,13 @@ export default function AdminEventsManagementPage() {
                 return (
                   <Card
                     key={ev.id}
-                    className="border-stone-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden bg-white"
+                    className="border-stone-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden bg-white dark:bg-[#111827]"
                   >
                     <CardContent className="p-5">
                       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
                         {/* Event Thumbnail & Info */}
                         <div className="flex items-start gap-4 flex-1 min-w-0">
-                          <div className="w-20 h-20 sm:w-28 sm:h-24 rounded-xl overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
+                          <div className="w-20 h-20 sm:w-28 sm:h-24 rounded-xl overflow-hidden bg-stone-100 dark:bg-slate-800 shrink-0 border border-stone-200 dark:border-slate-700">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={ev.bannerUrl || PRESET_BANNERS[0].url}
@@ -645,37 +649,37 @@ export default function AdminEventsManagementPage() {
                             <div className="flex flex-wrap items-center gap-2">
                               {renderStatusBadge(ev.status)}
                               {ev.category && (
-                                <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-700">
+                                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-300 border border-stone-200 dark:border-slate-700">
                                   {ev.category.name}
                                 </span>
                               )}
                               {ev.isOnline ? (
-                                <span className="inline-flex items-center gap-1 text-[11px] text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                                <span className="inline-flex items-center gap-1 text-[11px] text-indigo-700 dark:text-indigo-300 font-semibold bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-800/60">
                                   <Globe className="w-3 h-3" />
                                   <span>Virtual Online</span>
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1 text-[11px] text-stone-600 bg-stone-50 px-2 py-0.5 rounded-full">
-                                  <MapPin className="w-3 h-3 text-stone-400" />
+                                <span className="inline-flex items-center gap-1 text-[11px] text-stone-600 dark:text-slate-300 bg-stone-50 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-stone-200/60 dark:border-slate-700/60">
+                                  <MapPin className="w-3 h-3 text-stone-400 dark:text-slate-500" />
                                   <span>{ev.city || 'In-Person'}</span>
                                 </span>
                               )}
                             </div>
 
-                            <h3 className="text-base sm:text-lg font-bold text-navy-950 truncate hover:text-brand-600 transition-colors">
+                            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
                               <Link href={`/events/${ev.slug}`} target="_blank" className="hover:underline">
                                 {ev.title}
                               </Link>
                             </h3>
 
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-stone-500">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-stone-500 dark:text-slate-400">
                               <span className="flex items-center gap-1">
-                                <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                                <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                                 <span>{formatDate(ev.startDate)}</span>
                               </span>
                               <span className="flex items-center gap-1">
-                                <Ticket className="w-3.5 h-3.5 text-stone-400" />
-                                <span>
+                                <Ticket className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
+                                <span className="text-stone-700 dark:text-slate-200 font-medium">
                                   {minPrice === 0 && maxPrice === 0
                                     ? 'Free Event'
                                     : minPrice === maxPrice
@@ -683,10 +687,10 @@ export default function AdminEventsManagementPage() {
                                     : `${formatCurrency(minPrice)} - ${formatCurrency(maxPrice)}`}
                                 </span>
                               </span>
-                              <span className="text-stone-400">•</span>
+                              <span className="text-stone-300 dark:text-slate-700">•</span>
                               <span>Capacity: {ev.capacity}</span>
-                              <span className="text-stone-400">•</span>
-                              <span className="font-semibold text-stone-700">
+                              <span className="text-stone-300 dark:text-slate-700">•</span>
+                              <span className="font-semibold text-stone-700 dark:text-slate-200">
                                 {bookingsCount} {bookingsCount === 1 ? 'Booking' : 'Bookings'}
                               </span>
                             </div>
@@ -703,7 +707,7 @@ export default function AdminEventsManagementPage() {
                               size="sm"
                               onClick={() => statusMutation.mutate({ eventId: ev.id, status: 'DRAFT' })}
                               isLoading={statusMutation.isPending}
-                              className="text-xs font-semibold text-stone-700 hover:bg-stone-100 border-stone-300"
+                              className="text-xs font-semibold text-stone-700 dark:text-slate-200 hover:bg-stone-100 dark:hover:bg-slate-800 border-stone-300 dark:border-slate-700"
                               title="Unpublish this event (hides from public catalog)"
                             >
                               Unpublish
@@ -729,7 +733,7 @@ export default function AdminEventsManagementPage() {
                             variant="outline"
                             size="sm"
                             onClick={() => handleOpenEditEvent(ev)}
-                            className="text-xs font-semibold text-stone-700 hover:text-stone-900 border-stone-300 gap-1.5"
+                            className="text-xs font-semibold text-stone-700 dark:text-slate-200 hover:text-stone-900 dark:hover:text-white border-stone-300 dark:border-slate-700 hover:bg-stone-100 dark:hover:bg-slate-800 gap-1.5"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                             <span>Edit</span>
@@ -741,7 +745,7 @@ export default function AdminEventsManagementPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => setDeletingEvent(ev)}
-                            className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 p-2"
+                            className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 p-2"
                             title="Permanently delete event"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -751,7 +755,7 @@ export default function AdminEventsManagementPage() {
                           <Link
                             href={`/events/${ev.slug}`}
                             target="_blank"
-                            className="p-2 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"
+                            className="p-2 text-stone-400 dark:text-slate-400 hover:text-stone-700 dark:hover:text-slate-200 hover:bg-stone-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                             title="Open public event page in new tab"
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -765,7 +769,7 @@ export default function AdminEventsManagementPage() {
 
               {/* Pagination Controls */}
               {meta.totalPages > 1 && (
-                <div className="flex items-center justify-between pt-4 border-t border-stone-200 text-xs text-stone-500">
+                <div className="flex items-center justify-between pt-4 border-t border-stone-200 dark:border-slate-800 text-xs text-stone-500 dark:text-slate-400">
                   <span>
                     Showing Page {meta.page} of {meta.totalPages} ({meta.total} Total Events)
                   </span>
@@ -775,7 +779,7 @@ export default function AdminEventsManagementPage() {
                       size="sm"
                       disabled={currentPage <= 1}
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      className="gap-1 px-3"
+                      className="gap-1 px-3 border-stone-300 dark:border-slate-700 text-stone-700 dark:text-slate-200"
                     >
                       <ChevronLeft className="w-3.5 h-3.5" />
                       <span>Previous</span>
@@ -785,7 +789,7 @@ export default function AdminEventsManagementPage() {
                       size="sm"
                       disabled={currentPage >= meta.totalPages}
                       onClick={() => setCurrentPage((p) => p + 1)}
-                      className="gap-1 px-3"
+                      className="gap-1 px-3 border-stone-300 dark:border-slate-700 text-stone-700 dark:text-slate-200"
                     >
                       <span>Next</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -803,9 +807,9 @@ export default function AdminEventsManagementPage() {
       {/* ======================================================== */}
       {activeTab === 'moderation' && (
         <div className="space-y-6">
-          <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 text-xs text-amber-900 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+              <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
               <span>
                 These events were submitted by community organizers and are waiting for your administrative decision.
               </span>
@@ -816,7 +820,7 @@ export default function AdminEventsManagementPage() {
           {isLoadingPending ? (
             <div className="space-y-4">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="h-44 bg-stone-200 animate-pulse rounded-2xl" />
+                <div key={n} className="h-44 bg-stone-200 dark:bg-slate-800 animate-pulse rounded-2xl" />
               ))}
             </div>
           ) : pendingEvents.length === 0 ? (
@@ -828,10 +832,10 @@ export default function AdminEventsManagementPage() {
           ) : (
             <div className="space-y-6">
               {pendingEvents.map((event) => (
-                <Card key={event.id} className="border-stone-200 shadow-sm overflow-hidden bg-white">
+                <Card key={event.id} className="border-stone-200 dark:border-slate-800 shadow-sm overflow-hidden bg-white dark:bg-[#111827]">
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row gap-6">
-                      <div className="w-full md:w-56 h-36 rounded-xl overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
+                      <div className="w-full md:w-56 h-36 rounded-xl overflow-hidden bg-stone-100 dark:bg-slate-800 shrink-0 border border-stone-200 dark:border-slate-700">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={event.bannerUrl || PRESET_BANNERS[0].url}
@@ -846,38 +850,38 @@ export default function AdminEventsManagementPage() {
                             PENDING REVIEW
                           </Badge>
                           {event.category && (
-                            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700">
+                            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-300 border border-stone-200 dark:border-slate-700">
                               {event.category.name}
                             </span>
                           )}
                         </div>
 
-                        <h3 className="font-serif text-xl font-bold text-navy-950">
+                        <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white">
                           {event.title}
                         </h3>
 
-                        <p className="text-xs text-stone-600 line-clamp-2">
+                        <p className="text-xs text-stone-600 dark:text-slate-300 line-clamp-2">
                           {event.description}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-stone-500 pt-1">
-                          <span className="flex items-center gap-1 font-medium text-stone-700">
-                            <User className="w-3.5 h-3.5 text-stone-400" />
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-stone-500 dark:text-slate-400 pt-1">
+                          <span className="flex items-center gap-1 font-medium text-stone-700 dark:text-slate-200">
+                            <User className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                             {event.organizer?.name || 'Organizer'} (
                             {event.organizer?.profile?.organizationName || 'Independent'})
                           </span>
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                            <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                             {formatDate(event.startDate)}
                           </span>
                           <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-stone-400" />
+                            <MapPin className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                             {event.isOnline ? 'Online' : event.city || event.venueName || 'In-Person'}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex md:flex-col items-center justify-end gap-2 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-stone-100">
+                      <div className="flex md:flex-col items-center justify-end gap-2 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-stone-100 dark:border-slate-800">
                         <Button
                           variant="primary"
                           size="sm"
@@ -896,7 +900,7 @@ export default function AdminEventsManagementPage() {
                             setRejectModalEvent(event);
                             setRejectionReason('');
                           }}
-                          className="w-full gap-1.5 text-rose-600 hover:bg-rose-50 border-rose-200 font-semibold"
+                          className="w-full gap-1.5 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border-rose-200 dark:border-rose-900/60 font-semibold"
                         >
                           <XCircle className="w-4 h-4" />
                           <span>Reject</span>
@@ -972,13 +976,13 @@ export default function AdminEventsManagementPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                   Category *
                 </label>
                 <select
                   value={formCategoryId}
                   onChange={(e) => setFormCategoryId(e.target.value)}
-                  className="w-full h-11 px-3 text-sm bg-white border border-stone-300 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 font-medium"
+                  className="w-full h-11 px-3 text-sm bg-white dark:bg-[#1E293B] text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 font-medium"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -989,13 +993,13 @@ export default function AdminEventsManagementPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                   Publication Status *
                 </label>
                 <select
                   value={formStatus}
                   onChange={(e) => setFormStatus(e.target.value as any)}
-                  className="w-full h-11 px-3 text-sm bg-white border border-stone-300 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 font-bold text-stone-800"
+                  className="w-full h-11 px-3 text-sm bg-white dark:bg-[#1E293B] text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 font-bold"
                 >
                   <option value="PUBLISHED">Published (Visible immediately on Home & Explore)</option>
                   <option value="DRAFT">Draft (Hidden from public catalog)</option>
@@ -1005,14 +1009,14 @@ export default function AdminEventsManagementPage() {
           </div>
 
           {/* 2. Banner & Visuals */}
-          <div className="space-y-3 pt-4 border-t border-stone-100">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5 text-brand-600" />
+          <div className="space-y-3 pt-4 border-t border-stone-100 dark:border-slate-800">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
+              <Eye className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
               <span>Event Banner Image</span>
             </h4>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                 Banner Image URL
               </label>
               <Input
@@ -1023,7 +1027,7 @@ export default function AdminEventsManagementPage() {
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-xs text-stone-500">Or choose a curated high-resolution preset:</span>
+              <span className="text-xs text-stone-500 dark:text-slate-400">Or choose a curated high-resolution preset:</span>
               <div className="flex flex-wrap gap-2">
                 {PRESET_BANNERS.map((preset) => (
                   <button
@@ -1032,8 +1036,8 @@ export default function AdminEventsManagementPage() {
                     onClick={() => setFormBannerUrl(preset.url)}
                     className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
                       formBannerUrl === preset.url
-                        ? 'bg-brand-50 border-brand-500 text-brand-700 font-bold'
-                        : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
+                        ? 'bg-brand-50 dark:bg-brand-950/60 border-brand-500 text-brand-700 dark:text-brand-300 font-bold'
+                        : 'bg-white dark:bg-slate-800 border-stone-200 dark:border-slate-700 text-stone-600 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     {preset.label}
@@ -1043,7 +1047,7 @@ export default function AdminEventsManagementPage() {
             </div>
 
             {formBannerUrl && (
-              <div className="w-full h-28 rounded-xl overflow-hidden border border-stone-200 bg-stone-50 relative mt-2">
+              <div className="w-full h-28 rounded-xl overflow-hidden border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800 relative mt-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={formBannerUrl} alt="Preview" className="w-full h-full object-cover" />
                 <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold bg-black/60 text-white">
@@ -1054,15 +1058,15 @@ export default function AdminEventsManagementPage() {
           </div>
 
           {/* 3. Schedule & Location */}
-          <div className="space-y-4 pt-4 border-t border-stone-100">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-brand-600" />
+          <div className="space-y-4 pt-4 border-t border-stone-100 dark:border-slate-800">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
               <span>Dates & Location</span>
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                   Start Date & Time *
                 </label>
                 <input
@@ -1070,12 +1074,12 @@ export default function AdminEventsManagementPage() {
                   value={formStartDate}
                   onChange={(e) => setFormStartDate(e.target.value)}
                   required
-                  className="w-full h-11 px-3 text-sm bg-white border border-stone-300 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full h-11 px-3 text-sm bg-white dark:bg-[#1E293B] text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                   End Date & Time *
                 </label>
                 <input
@@ -1083,20 +1087,20 @@ export default function AdminEventsManagementPage() {
                   value={formEndDate}
                   onChange={(e) => setFormEndDate(e.target.value)}
                   required
-                  className="w-full h-11 px-3 text-sm bg-white border border-stone-300 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  className="w-full h-11 px-3 text-sm bg-white dark:bg-[#1E293B] text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-xl focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 border border-stone-200">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 dark:bg-slate-800/60 border border-stone-200 dark:border-slate-700">
               <input
                 type="checkbox"
                 id="isOnlineCheck"
                 checked={formIsOnline}
                 onChange={(e) => setFormIsOnline(e.target.checked)}
-                className="w-4 h-4 text-brand-600 rounded border-stone-300 focus:ring-brand-500"
+                className="w-4 h-4 text-brand-600 rounded border-stone-300 dark:border-slate-700 focus:ring-brand-500"
               />
-              <label htmlFor="isOnlineCheck" className="text-xs font-semibold text-stone-800 cursor-pointer">
+              <label htmlFor="isOnlineCheck" className="text-xs font-semibold text-stone-800 dark:text-slate-200 cursor-pointer">
                 This is a Virtual / Online Event (No physical venue required)
               </label>
             </div>
@@ -1104,7 +1108,7 @@ export default function AdminEventsManagementPage() {
             {!formIsOnline && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                     City *
                   </label>
                   <Input
@@ -1115,7 +1119,7 @@ export default function AdminEventsManagementPage() {
                   />
                 </div>
                 <div className="sm:col-span-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                     Venue Name *
                   </label>
                   <Input
@@ -1126,7 +1130,7 @@ export default function AdminEventsManagementPage() {
                   />
                 </div>
                 <div className="sm:col-span-1">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                     Street Address
                   </label>
                   <Input
@@ -1140,7 +1144,7 @@ export default function AdminEventsManagementPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                   Total Event Capacity *
                 </label>
                 <Input
@@ -1153,7 +1157,7 @@ export default function AdminEventsManagementPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300 mb-1">
                   Cancellation Policy
                 </label>
                 <Input
@@ -1165,16 +1169,16 @@ export default function AdminEventsManagementPage() {
           </div>
 
           {/* 4. Ticket Types Builder */}
-          <div className="space-y-3 pt-4 border-t border-stone-100">
+          <div className="space-y-3 pt-4 border-t border-stone-100 dark:border-slate-800">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700 flex items-center gap-1.5">
-                <Ticket className="w-3.5 h-3.5 text-brand-600" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-brand-400 flex items-center gap-1.5">
+                <Ticket className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
                 <span>Ticket Tiers & Pricing</span>
               </h4>
               <button
                 type="button"
                 onClick={handleAddTicketTier}
-                className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1 underline"
+                className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center gap-1 underline"
               >
                 + Add Another Tier
               </button>
@@ -1184,10 +1188,10 @@ export default function AdminEventsManagementPage() {
               {formTicketTypes.map((tier, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 border border-stone-200"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 dark:bg-slate-800/60 border border-stone-200 dark:border-slate-700"
                 >
                   <div className="flex-1">
-                    <label className="block text-[11px] font-semibold text-stone-600 mb-1">
+                    <label className="block text-[11px] font-semibold text-stone-600 dark:text-slate-400 mb-1">
                       Tier Name
                     </label>
                     <input
@@ -1196,12 +1200,12 @@ export default function AdminEventsManagementPage() {
                       onChange={(e) => handleUpdateTicketTier(idx, 'name', e.target.value)}
                       placeholder="e.g. General Admission"
                       required
-                      className="w-full px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg focus:outline-none focus:border-brand-500"
+                      className="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-lg focus:outline-none focus:border-brand-500"
                     />
                   </div>
 
                   <div className="w-28">
-                    <label className="block text-[11px] font-semibold text-stone-600 mb-1">
+                    <label className="block text-[11px] font-semibold text-stone-600 dark:text-slate-400 mb-1">
                       Price ($)
                     </label>
                     <input
@@ -1211,12 +1215,12 @@ export default function AdminEventsManagementPage() {
                       value={tier.price}
                       onChange={(e) => handleUpdateTicketTier(idx, 'price', Number(e.target.value))}
                       required
-                      className="w-full px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg focus:outline-none focus:border-brand-500"
+                      className="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-lg focus:outline-none focus:border-brand-500"
                     />
                   </div>
 
                   <div className="w-28">
-                    <label className="block text-[11px] font-semibold text-stone-600 mb-1">
+                    <label className="block text-[11px] font-semibold text-stone-600 dark:text-slate-400 mb-1">
                       Quantity
                     </label>
                     <input
@@ -1225,7 +1229,7 @@ export default function AdminEventsManagementPage() {
                       value={tier.totalQuantity}
                       onChange={(e) => handleUpdateTicketTier(idx, 'totalQuantity', Number(e.target.value))}
                       required
-                      className="w-full px-3 py-1.5 text-xs bg-white border border-stone-300 rounded-lg focus:outline-none focus:border-brand-500"
+                      className="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-stone-300 dark:border-slate-700 rounded-lg focus:outline-none focus:border-brand-500"
                     />
                   </div>
 
@@ -1246,7 +1250,7 @@ export default function AdminEventsManagementPage() {
           </div>
 
           {/* Modal Actions */}
-          <div className="flex items-center justify-end gap-3 pt-6 border-t border-stone-200">
+          <div className="flex items-center justify-end gap-3 pt-6 border-t border-stone-200 dark:border-slate-800">
             <Button
               type="button"
               variant="outline"
@@ -1281,11 +1285,11 @@ export default function AdminEventsManagementPage() {
       >
         {deletingEvent && (
           <div className="space-y-4 pt-2">
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs space-y-2">
+            <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-900 dark:text-rose-200 text-xs space-y-2">
               <div className="flex items-start gap-2.5">
                 <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-bold text-sm text-rose-950 mb-1">
+                  <p className="font-bold text-sm text-rose-950 dark:text-rose-100 mb-1">
                     Delete &ldquo;{deletingEvent.title}&rdquo;?
                   </p>
                   <p>
@@ -1295,7 +1299,7 @@ export default function AdminEventsManagementPage() {
               </div>
 
               {deletingEvent._count?.bookings > 0 && (
-                <div className="mt-3 p-3 rounded-lg bg-rose-200/60 border border-rose-300 text-rose-950 font-semibold">
+                <div className="mt-3 p-3 rounded-lg bg-rose-200/60 dark:bg-rose-900/40 border border-rose-300 dark:border-rose-800 text-rose-950 dark:text-rose-200 font-semibold">
                   ⚠️ Critical Warning: This event has{' '}
                   <span className="font-extrabold">{deletingEvent._count.bookings} confirmed bookings</span>.
                   Deleting it will disrupt attendees who hold passes for this event.
@@ -1303,7 +1307,7 @@ export default function AdminEventsManagementPage() {
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-100">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-100 dark:border-slate-800">
               <Button
                 variant="outline"
                 size="md"

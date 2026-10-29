@@ -98,9 +98,9 @@ export default function ProfileSettingsPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Header */}
-      <div className="pb-6 border-b border-stone-200">
-        <h1 className="font-serif text-3xl font-bold text-navy-950">Account & Profile Settings</h1>
-        <p className="text-sm text-stone-500 mt-1">
+      <div className="pb-6 border-b border-stone-200 dark:border-slate-800">
+        <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Account & Profile Settings</h1>
+        <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
           Manage your personal information, security credentials, and organization privileges.
         </p>
       </div>
@@ -108,9 +108,9 @@ export default function ProfileSettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Profile Card */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="border-stone-200">
+          <Card className="border-stone-200 dark:border-slate-800 bg-white dark:bg-[#111827]">
             <CardContent className="p-6 text-center space-y-4">
-              <div className="w-24 h-24 rounded-3xl bg-stone-900 text-white text-3xl font-bold flex items-center justify-center mx-auto overflow-hidden shadow-md">
+              <div className="w-24 h-24 rounded-3xl bg-stone-900 dark:bg-slate-800 text-white text-3xl font-bold flex items-center justify-center mx-auto overflow-hidden shadow-md">
                 {avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
@@ -120,8 +120,8 @@ export default function ProfileSettingsPage() {
               </div>
 
               <div>
-                <h3 className="font-serif text-lg font-bold text-stone-900">{name || user?.name}</h3>
-                <p className="text-xs text-stone-500">{user?.email}</p>
+                <h3 className="font-serif text-lg font-bold text-stone-900 dark:text-white">{name || user?.name}</h3>
+                <p className="text-xs text-stone-500 dark:text-slate-400">{user?.email}</p>
                 <div className="mt-2">
                   <Badge variant="outline" className="text-xs font-semibold uppercase tracking-wider">
                     {user?.role}
@@ -131,16 +131,16 @@ export default function ProfileSettingsPage() {
 
               {/* Organizer Access Callout */}
               {user?.role === UserRole.ATTENDEE && (
-                <div className="pt-4 border-t border-stone-100 text-left space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-stone-600 block">
+                <div className="pt-4 border-t border-stone-100 dark:border-slate-800 text-left space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-slate-400 block">
                     Host Events on EVENTRA
                   </span>
-                  <p className="text-xs text-stone-500 leading-relaxed">
+                  <p className="text-xs text-stone-500 dark:text-slate-400 leading-relaxed">
                     Want to create events, configure ticket tiers, and scan passes?
                   </p>
                   {profile?.latestOrganizerRequest?.status === 'PENDING' ? (
-                    <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                    <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 text-xs text-amber-900 dark:text-amber-200 flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                       <span>Application under admin review</span>
                     </div>
                   ) : (
@@ -150,7 +150,7 @@ export default function ProfileSettingsPage() {
                       onClick={() => setOrganizerModalOpen(true)}
                       className="w-full text-xs font-semibold gap-1.5"
                     >
-                      <Briefcase className="w-4 h-4 text-brand-600" />
+                      <Briefcase className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                       <span>Request Organizer Access</span>
                     </Button>
                   )}
@@ -163,10 +163,10 @@ export default function ProfileSettingsPage() {
         {/* Right Column: Forms */}
         <div className="lg:col-span-2 space-y-8">
           {/* Profile Edit Form */}
-          <Card className="border-stone-200 shadow-sm">
-            <CardHeader className="bg-stone-50/50 pb-4">
-              <CardTitle className="text-base flex items-center gap-2">
-                <User className="w-4 h-4 text-brand-600" />
+          <Card className="border-stone-200 dark:border-slate-800 shadow-sm bg-white dark:bg-[#111827]">
+            <CardHeader className="bg-stone-50/50 dark:bg-slate-900/60 pb-4 border-b border-stone-100 dark:border-slate-800">
+              <CardTitle className="text-base flex items-center gap-2 text-stone-900 dark:text-white">
+                <User className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                 <span>Personal Information</span>
               </CardTitle>
             </CardHeader>
@@ -223,10 +223,10 @@ export default function ProfileSettingsPage() {
           </Card>
 
           {/* Change Password Form */}
-          <Card className="border-stone-200 shadow-sm">
-            <CardHeader className="bg-stone-50/50 pb-4">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Lock className="w-4 h-4 text-brand-600" />
+          <Card className="border-stone-200 dark:border-slate-800 shadow-sm bg-white dark:bg-[#111827]">
+            <CardHeader className="bg-stone-50/50 dark:bg-slate-900/60 pb-4 border-b border-stone-100 dark:border-slate-800">
+              <CardTitle className="text-base flex items-center gap-2 text-stone-900 dark:text-white">
+                <Lock className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                 <span>Security & Password</span>
               </CardTitle>
             </CardHeader>

@@ -31,8 +31,8 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       <div>
-        <h1 className="font-serif text-3xl font-bold text-navy-950">Account Settings</h1>
-        <p className="text-sm text-stone-500 mt-1">
+        <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Account Settings</h1>
+        <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
           Manage your security settings, notification channels, and privacy controls.
         </p>
       </div>
@@ -40,47 +40,47 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Quick Links Column */}
         <div className="space-y-3">
-          <Card className="border-stone-200">
+          <Card className="border-stone-200 dark:border-slate-800">
             <CardContent className="p-2 space-y-1">
               <Link
                 href="/profile/edit"
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 text-xs font-semibold text-stone-800 transition-colors"
+                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 dark:hover:bg-slate-800 text-xs font-semibold text-stone-800 dark:text-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <User className="w-4 h-4 text-brand-600" />
+                  <User className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                   <span>Edit Profile</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-stone-400" />
+                <ChevronRight className="w-4 h-4 text-stone-400 dark:text-slate-500" />
               </Link>
               <Link
                 href="/profile/change-password"
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 text-xs font-semibold text-stone-800 transition-colors"
+                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 dark:hover:bg-slate-800 text-xs font-semibold text-stone-800 dark:text-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <Lock className="w-4 h-4 text-brand-600" />
+                  <Lock className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                   <span>Change Password</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-stone-400" />
+                <ChevronRight className="w-4 h-4 text-stone-400 dark:text-slate-500" />
               </Link>
               <Link
                 href="/profile/organizer-access"
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 text-xs font-semibold text-stone-800 transition-colors"
+                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 dark:hover:bg-slate-800 text-xs font-semibold text-stone-800 dark:text-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <Shield className="w-4 h-4 text-brand-600" />
+                  <Shield className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                   <span>Organizer Access</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-stone-400" />
+                <ChevronRight className="w-4 h-4 text-stone-400 dark:text-slate-500" />
               </Link>
               <Link
                 href="/notifications"
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 text-xs font-semibold text-stone-800 transition-colors"
+                className="flex items-center justify-between p-3 rounded-xl hover:bg-stone-50 dark:hover:bg-slate-800 text-xs font-semibold text-stone-800 dark:text-slate-200 transition-colors"
               >
                 <div className="flex items-center gap-2.5">
-                  <Bell className="w-4 h-4 text-brand-600" />
+                  <Bell className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                   <span>Notifications Center</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-stone-400" />
+                <ChevronRight className="w-4 h-4 text-stone-400 dark:text-slate-500" />
               </Link>
             </CardContent>
           </Card>
@@ -88,20 +88,20 @@ export default function SettingsPage() {
 
         {/* Settings Panels */}
         <div className="md:col-span-2 space-y-6">
-          <Card className="border-stone-200 shadow-sm">
-            <CardHeader className="border-b border-stone-100">
+          <Card className="border-stone-200 dark:border-slate-800 shadow-sm">
+            <CardHeader className="border-b border-stone-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-brand-600" />
-                <CardTitle className="text-base">Notification Preferences</CardTitle>
+                <Bell className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+                <CardTitle className="text-base text-stone-900 dark:text-white">Notification Preferences</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="pt-6 space-y-4">
-              <div className="flex items-center justify-between py-2 border-b border-stone-100">
+              <div className="flex items-center justify-between py-2 border-b border-stone-100 dark:border-slate-800">
                 <div>
-                  <span className="text-sm font-semibold text-stone-900 block">
+                  <span className="text-sm font-semibold text-stone-900 dark:text-white block">
                     Booking Confirmations & QR Passes
                   </span>
-                  <span className="text-xs text-stone-500">
+                  <span className="text-xs text-stone-500 dark:text-slate-400">
                     Receive email receipts and scannable tickets immediately after checkout.
                   </span>
                 </div>
@@ -113,12 +113,12 @@ export default function SettingsPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between py-2 border-b border-stone-100">
+              <div className="flex items-center justify-between py-2 border-b border-stone-100 dark:border-slate-800">
                 <div>
-                  <span className="text-sm font-semibold text-stone-900 block">
+                  <span className="text-sm font-semibold text-stone-900 dark:text-white block">
                     SMS Event Day Reminders
                   </span>
-                  <span className="text-xs text-stone-500">
+                  <span className="text-xs text-stone-500 dark:text-slate-400">
                     Get gate check-in reminders and venue updates on your mobile phone.
                   </span>
                 </div>
@@ -132,10 +132,10 @@ export default function SettingsPage() {
 
               <div className="flex items-center justify-between py-2">
                 <div>
-                  <span className="text-sm font-semibold text-stone-900 block">
+                  <span className="text-sm font-semibold text-stone-900 dark:text-white block">
                     Curated Discovery Newsletter
                   </span>
-                  <span className="text-xs text-stone-500">
+                  <span className="text-xs text-stone-500 dark:text-slate-400">
                     Weekly highlights of upcoming concerts, conferences, and festivals in your city.
                   </span>
                 </div>
@@ -155,24 +155,24 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-stone-200 shadow-sm">
-            <CardHeader className="border-b border-stone-100">
+          <Card className="border-stone-200 dark:border-slate-800 shadow-sm">
+            <CardHeader className="border-b border-stone-100 dark:border-slate-800">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-brand-600" />
-                  <CardTitle className="text-base">Active Account Tier</CardTitle>
+                  <Shield className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+                  <CardTitle className="text-base text-stone-900 dark:text-white">Active Account Tier</CardTitle>
                 </div>
                 <Badge variant="brand" className="uppercase font-bold text-xs">
                   {user?.role || 'ATTENDEE'}
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="pt-4 text-xs text-stone-600 space-y-2">
+            <CardContent className="pt-4 text-xs text-stone-600 dark:text-slate-300 space-y-2">
               <p>
-                Connected Email: <strong>{user?.email}</strong>
+                Connected Email: <strong className="text-stone-900 dark:text-white">{user?.email}</strong>
               </p>
               <p>
-                Account Status: <span className="text-emerald-700 font-bold uppercase">{user?.status || 'ACTIVE'}</span>
+                Account Status: <span className="text-emerald-700 dark:text-emerald-400 font-bold uppercase">{user?.status || 'ACTIVE'}</span>
               </p>
             </CardContent>
           </Card>

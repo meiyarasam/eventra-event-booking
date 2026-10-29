@@ -49,7 +49,7 @@ export function FeaturedEventsSection({
   });
 
   return (
-    <section className="relative py-20 sm:py-28 bg-gradient-to-b from-[#0A0F1D] via-[#0E1528] to-[#0A0F1D] text-white border-b border-slate-800/80 overflow-hidden">
+    <section className="relative py-20 sm:py-28 bg-stone-50 dark:bg-gradient-to-b dark:from-[#0A0F1D] dark:via-[#0E1528] dark:to-[#0A0F1D] text-stone-900 dark:text-white border-b border-stone-200 dark:border-slate-800/80 overflow-hidden transition-colors">
       {/* 1. Luminous Ambient Glow Orbs (Soft, elegant lighting eliminating flat black spots) */}
       <div className="absolute top-10 -left-24 w-[600px] h-[600px] bg-gradient-to-tr from-brand-500/12 via-orange-500/6 to-transparent rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-1/3 -right-24 w-[680px] h-[680px] bg-gradient-to-bl from-indigo-500/15 via-purple-600/8 to-transparent rounded-full blur-[150px] pointer-events-none" />
@@ -94,27 +94,27 @@ export function FeaturedEventsSection({
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           {/* Section Title & Description */}
           <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-400 block">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400 block">
               Curated Selection
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-navy-950 dark:text-white tracking-tight leading-tight">
               Events worth making plans for
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-stone-600 dark:text-slate-400 font-normal leading-relaxed">
               Explore live music, industry summits, workshops and experiences worth your time.
             </p>
           </div>
 
           {/* Functional Filter Tabs & View All Button */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center p-1 bg-slate-900/90 rounded-full border border-slate-800 backdrop-blur-md shadow-lg">
+            <div className="inline-flex items-center p-1 bg-stone-200/80 dark:bg-slate-900/90 rounded-full border border-stone-300 dark:border-slate-800 backdrop-blur-md shadow-sm dark:shadow-lg">
               <button
                 type="button"
                 onClick={() => setActiveTab('all')}
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                   activeTab === 'all'
                     ? 'bg-gradient-to-r from-brand-500 to-orange-500 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-stone-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white'
                 }`}
               >
                 Featured
@@ -125,7 +125,7 @@ export function FeaturedEventsSection({
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                   activeTab === 'this-week'
                     ? 'bg-gradient-to-r from-brand-500 to-orange-500 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-stone-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white'
                 }`}
               >
                 This Week
@@ -136,7 +136,7 @@ export function FeaturedEventsSection({
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                   activeTab === 'free'
                     ? 'bg-gradient-to-r from-brand-500 to-orange-500 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-stone-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white'
                 }`}
               >
                 Free Events
@@ -145,7 +145,7 @@ export function FeaturedEventsSection({
 
             <Link
               href="/events"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-brand-400 hover:text-brand-300 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 transition-all hover:translate-x-0.5 ml-1"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-500 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 transition-all hover:translate-x-0.5 ml-1"
             >
               <span>View All Events</span>
               <ArrowRight className="w-3.5 h-3.5" />

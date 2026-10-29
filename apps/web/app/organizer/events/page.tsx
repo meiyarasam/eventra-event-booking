@@ -100,8 +100,8 @@ export default function OrganizerEventsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl font-bold text-navy-950">My Managed Events</h1>
-          <p className="text-sm text-stone-500 mt-1">
+          <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">My Managed Events</h1>
+          <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
             Review event status, submit drafts for review, and launch check-in scanners.
           </p>
         </div>
@@ -115,7 +115,7 @@ export default function OrganizerEventsPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-stone-200">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none border-b border-stone-200 dark:border-slate-800">
         {[
           { key: 'ALL', label: 'All Statuses' },
           { key: EventStatus.PUBLISHED, label: 'Published & Live' },
@@ -130,8 +130,8 @@ export default function OrganizerEventsPage() {
             onClick={() => setSelectedStatus(tab.key)}
             className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
               selectedStatus === tab.key
-                ? 'bg-stone-900 text-white shadow-sm'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                ? 'bg-stone-900 dark:bg-brand-600 text-white shadow-sm'
+                : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800'
             }`}
           >
             {tab.label}
@@ -143,12 +143,12 @@ export default function OrganizerEventsPage() {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="h-40 bg-stone-200 animate-pulse rounded-2xl" />
+            <div key={n} className="h-40 bg-stone-200 dark:bg-slate-800 animate-pulse rounded-2xl" />
           ))}
         </div>
       ) : events.length === 0 ? (
         <EmptyState
-          icon={<Calendar className="w-12 h-12 text-stone-400" />}
+          icon={<Calendar className="w-12 h-12 text-stone-400 dark:text-slate-500" />}
           title="No Events Found"
           description="You don't have any events matching the selected status filter."
           actionText="Create an Event"
@@ -160,13 +160,13 @@ export default function OrganizerEventsPage() {
             const soldCount = event.ticketTypes?.reduce((acc, t) => acc + t.soldQuantity, 0) || 0;
 
             return (
-              <Card key={event.id} className="border-stone-200 hover:border-stone-300 transition-colors">
+              <Card key={event.id} className="border-stone-200 dark:border-slate-800 hover:border-stone-300 dark:hover:border-slate-700 transition-colors">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     {/* Left: Banner and Info */}
                     <div className="flex items-start gap-4">
                       {event.bannerUrl && (
-                        <div className="w-24 h-24 rounded-2xl overflow-hidden bg-stone-100 shrink-0">
+                        <div className="w-24 h-24 rounded-2xl overflow-hidden bg-stone-100 dark:bg-slate-800 shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={event.bannerUrl}
@@ -181,28 +181,28 @@ export default function OrganizerEventsPage() {
                           <Badge variant={statusBadgeVariant(event.status)} className="text-[10px] uppercase font-bold">
                             {event.status.replace('_', ' ')}
                           </Badge>
-                          <span className="text-xs text-stone-400 font-medium">
+                          <span className="text-xs text-stone-400 dark:text-slate-500 font-medium">
                             {event.category?.name}
                           </span>
                         </div>
 
-                        <h3 className="font-serif text-lg font-bold text-stone-900 line-clamp-1">
+                        <h3 className="font-serif text-lg font-bold text-stone-900 dark:text-white line-clamp-1">
                           {event.title}
                         </h3>
 
-                        <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500">
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500 dark:text-slate-400">
                           <span>{formatDate(event.startDate, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                           <span>•</span>
                           <span>{event.city || (event.isOnline ? 'Virtual Live' : 'Location TBA')}</span>
                           <span>•</span>
-                          <span className="font-semibold text-stone-800">
+                          <span className="font-semibold text-stone-800 dark:text-slate-200">
                             {soldCount} / {event.capacity} seats sold
                           </span>
                         </div>
 
                         {/* Rejection reason banner */}
                         {event.status === EventStatus.REJECTED && event.rejectionReason && (
-                          <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 mt-2">
+                          <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 text-xs text-rose-800 dark:text-rose-300 mt-2">
                             <strong>Review Feedback:</strong> {event.rejectionReason}
                           </div>
                         )}
@@ -210,7 +210,7 @@ export default function OrganizerEventsPage() {
                     </div>
 
                     {/* Right: State Action Buttons */}
-                    <div className="flex flex-wrap items-center gap-2.5 pt-4 lg:pt-0 border-t lg:border-t-0 border-stone-100">
+                    <div className="flex flex-wrap items-center gap-2.5 pt-4 lg:pt-0 border-t lg:border-t-0 border-stone-100 dark:border-slate-800">
                       {/* Check-In Scanner & Attendee Roster */}
                       {(event.status === EventStatus.PUBLISHED || event.status === EventStatus.APPROVED) && (
                         <Link href={`/organizer/events/${event.id}/attendees`}>

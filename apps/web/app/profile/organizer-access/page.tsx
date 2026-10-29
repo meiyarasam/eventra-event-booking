@@ -60,25 +60,25 @@ export default function OrganizerAccessRequestPage() {
       <div>
         <Link
           href="/profile"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Profile Overview</span>
         </Link>
-        <h1 className="font-serif text-3xl font-bold text-navy-950">Organizer Access Request</h1>
-        <p className="text-sm text-stone-500 mt-1">
+        <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Organizer Access Request</h1>
+        <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
           Apply to host, publish, and sell tickets for your live events, conferences, and festivals.
         </p>
       </div>
 
       {isAlreadyOrganizer ? (
-        <Card className="border-emerald-200 bg-emerald-50/20">
+        <Card className="border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/20 dark:bg-emerald-950/20">
           <CardContent className="pt-6 space-y-4 text-center py-10">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-bold text-stone-900">You Are an Authorized Organizer</h2>
-            <p className="text-sm text-stone-600 max-w-md mx-auto">
+            <h2 className="text-xl font-bold text-stone-900 dark:text-white">You Are an Authorized Organizer</h2>
+            <p className="text-sm text-stone-600 dark:text-slate-300 max-w-md mx-auto">
               Your account currently holds {user?.role} privileges. You have complete access to create events, configure ticket tiers, and view real-time attendee analytics.
             </p>
             <div className="pt-2">
@@ -89,10 +89,10 @@ export default function OrganizerAccessRequestPage() {
           </CardContent>
         </Card>
       ) : pendingRequest ? (
-        <Card className="border-stone-200">
-          <CardHeader className="border-b border-stone-100">
+        <Card className="border-stone-200 dark:border-slate-800">
+          <CardHeader className="border-b border-stone-100 dark:border-slate-800">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Current Application Status</CardTitle>
+              <CardTitle className="text-base text-stone-900 dark:text-white">Current Application Status</CardTitle>
               <Badge
                 variant={
                   pendingRequest.status === 'APPROVED'
@@ -107,9 +107,9 @@ export default function OrganizerAccessRequestPage() {
             </div>
           </CardHeader>
           <CardContent className="pt-6 space-y-4">
-            <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 flex items-start gap-3">
-              <Clock className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-              <div className="text-xs text-amber-900 space-y-1">
+            <div className="p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 flex items-start gap-3">
+              <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+              <div className="text-xs text-amber-900 dark:text-amber-200 space-y-1">
                 <span className="font-bold block">Application Under Administrator Review</span>
                 <p>
                   Your organizer application for <strong>{pendingRequest.organizationName}</strong> was submitted on{' '}
@@ -118,7 +118,7 @@ export default function OrganizerAccessRequestPage() {
               </div>
             </div>
 
-            <div className="text-xs text-stone-500 space-y-1 pt-2">
+            <div className="text-xs text-stone-500 dark:text-slate-400 space-y-1 pt-2">
               <p><strong>Reason provided:</strong> {pendingRequest.reason}</p>
               {pendingRequest.websiteUrl && (
                 <p><strong>Website:</strong> {pendingRequest.websiteUrl}</p>
@@ -127,11 +127,11 @@ export default function OrganizerAccessRequestPage() {
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-stone-200 shadow-sm">
-          <CardHeader className="border-b border-stone-100">
+        <Card className="border-stone-200 dark:border-slate-800 shadow-sm">
+          <CardHeader className="border-b border-stone-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-brand-600" />
-              <CardTitle className="text-lg">Organizer Application</CardTitle>
+              <Sparkles className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+              <CardTitle className="text-lg text-stone-900 dark:text-white">Organizer Application</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="pt-6">
@@ -168,7 +168,7 @@ export default function OrganizerAccessRequestPage() {
                 </span>
               </div>
 
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-stone-100">
+              <div className="pt-4 flex items-center justify-end gap-3 border-t border-stone-100 dark:border-slate-800">
                 <Link href="/profile">
                   <Button variant="outline" type="button">
                     Cancel

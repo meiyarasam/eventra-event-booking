@@ -78,38 +78,38 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden bg-gradient-to-b from-slate-50/80 via-[#FAF9F6] to-slate-100">
-      <div className="absolute inset-0 bg-dot-pattern opacity-40 pointer-events-none" />
+    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden bg-gradient-to-b from-slate-50/80 via-[#FAF9F6] to-slate-100 dark:from-[#0B0F19] dark:via-[#0E1528] dark:to-[#0B0F19]">
+      <div className="absolute inset-0 bg-dot-pattern opacity-40 dark:opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 left-1/3 w-[500px] h-[300px] bg-brand-500/10 blur-[100px] rounded-full pointer-events-none -z-0 animate-float" />
       <div className="absolute bottom-1/4 right-1/3 w-[450px] h-[280px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none -z-0 animate-float-slow" />
       <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Brand Header */}
         <div className="text-center space-y-2 flex flex-col items-center">
           <BrandLogo size="lg" className="mb-2" />
-          <h1 className="font-serif text-2xl font-bold text-navy-950">User Sign In</h1>
-          <p className="text-xs text-stone-500">
+          <h1 className="font-serif text-2xl font-bold text-navy-950 dark:text-white">User Sign In</h1>
+          <p className="text-xs text-stone-500 dark:text-slate-400">
             Attendee and Organizer portal for tickets, reservations, and events.
           </p>
         </div>
 
         {/* Demo Credentials Quick-Fill */}
-        <div className="p-3 rounded-2xl bg-brand-50 border border-brand-200/80 flex items-center justify-between text-xs">
+        <div className="p-3.5 rounded-2xl bg-brand-50/80 dark:bg-brand-500/10 border border-brand-200/80 dark:border-brand-500/30 flex items-center justify-between text-xs shadow-xs">
           <div>
-            <p className="font-bold text-brand-900">Demo Accounts</p>
-            <p className="text-[11px] text-brand-700">Quick-fill attendee or organizer</p>
+            <p className="font-bold text-brand-900 dark:text-brand-300">Demo Accounts</p>
+            <p className="text-[11px] text-brand-700 dark:text-brand-400">Quick-fill attendee or organizer</p>
           </div>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => handleFillDemo('attendee')}
-              className="px-2.5 py-1 rounded-lg bg-white border border-brand-300 text-[11px] font-semibold text-brand-700 hover:bg-brand-50 transition-colors shadow-2xs"
+              className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-brand-300 dark:border-brand-500/40 text-[11px] font-semibold text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-slate-700 transition-colors shadow-2xs"
             >
               Attendee
             </button>
             <button
               type="button"
               onClick={() => handleFillDemo('organizer')}
-              className="px-2.5 py-1 rounded-lg bg-white border border-brand-300 text-[11px] font-semibold text-brand-700 hover:bg-brand-50 transition-colors shadow-2xs"
+              className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-brand-300 dark:border-brand-500/40 text-[11px] font-semibold text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-slate-700 transition-colors shadow-2xs"
             >
               Organizer
             </button>
@@ -117,7 +117,7 @@ function LoginForm() {
         </div>
 
         {/* Login Form */}
-        <Card className="border-stone-200 shadow-md">
+        <Card className="border-stone-200 dark:border-slate-800 shadow-md">
           <CardContent className="p-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Input
@@ -134,12 +134,12 @@ function LoginForm() {
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-slate-300">
                     Password
                   </label>
                   <Link
                     href="/forgot-password"
-                    className="text-xs text-brand-600 hover:underline font-medium"
+                    className="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium"
                   >
                     Forgot Password?
                   </Link>
@@ -158,14 +158,14 @@ function LoginForm() {
                       type="button"
                       id="toggle-login-password"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="p-1.5 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors focus:outline-none cursor-pointer flex items-center justify-center"
+                      className="p-1.5 rounded-lg text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer flex items-center justify-center"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? (
-                        <EyeOff className="w-5 h-5 text-stone-700" />
+                        <EyeOff className="w-5 h-5 text-stone-700 dark:text-slate-300" />
                       ) : (
-                        <Eye className="w-5 h-5 text-stone-700" />
+                        <Eye className="w-5 h-5 text-stone-700 dark:text-slate-300" />
                       )}
                     </button>
                   }
@@ -189,18 +189,18 @@ function LoginForm() {
 
         {/* Register & Admin Footer Links */}
         <div className="text-center space-y-2 pt-1">
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 dark:text-slate-400">
             Don't have an account yet?{' '}
-            <Link href="/register" className="font-semibold text-brand-600 hover:underline">
+            <Link href="/register" className="font-semibold text-brand-600 dark:text-brand-400 hover:underline">
               Create an Attendee Account
             </Link>
           </p>
-          <div className="pt-2 border-t border-stone-200">
+          <div className="pt-2 border-t border-stone-200 dark:border-slate-800">
             <Link
               href="/admin/login"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-600 hover:text-stone-900 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white transition-colors"
             >
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
+              <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />
               <span>Platform Administrator? Access Admin Portal →</span>
             </Link>
           </div>

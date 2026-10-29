@@ -77,6 +77,8 @@ model User {
   name              String
   role              UserRole          @default(ATTENDEE)
   status            AccountStatus     @default(ACTIVE)
+  // BUG-001 FIX: Track email verification state in the DB (was missing from schema).
+  emailVerified     Boolean           @default(false)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
 

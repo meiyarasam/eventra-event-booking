@@ -86,28 +86,28 @@ export default function MyTicketsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-serif text-3xl font-bold text-navy-950">My Digital Tickets & Passes</h1>
+            <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">My Digital Tickets & Passes</h1>
             {tickets.length > 0 && (
-              <Badge variant="outline" className="text-xs bg-stone-100 text-stone-700">
+              <Badge variant="outline" className="text-xs bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-slate-300 border-stone-200 dark:border-slate-700">
                 {groupedPasses.length} {groupedPasses.length === 1 ? 'Pass' : 'Passes'} • {tickets.length} Seats
               </Badge>
             )}
           </div>
-          <p className="text-sm text-stone-500 mt-1">
+          <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
             Access your consolidated admission passes and scannable gate QR codes.
           </p>
         </div>
 
         {/* View Mode Switcher */}
         {tickets.length > 0 && (
-          <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold self-start sm:self-auto">
+          <div className="flex items-center gap-1 bg-stone-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold self-start sm:self-auto border border-stone-200 dark:border-slate-700">
             <button
               type="button"
               onClick={() => setTicketViewMode('GROUPED')}
               className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 ticketViewMode === 'GROUPED'
-                  ? 'bg-white text-navy-950 shadow-sm font-bold'
-                  : 'text-stone-600 hover:text-navy-950'
+                  ? 'bg-white dark:bg-[#1E293B] text-navy-950 dark:text-white shadow-sm font-bold'
+                  : 'text-stone-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white'
               }`}
             >
               <Layers className="w-3.5 h-3.5 text-brand-600" />
@@ -118,8 +118,8 @@ export default function MyTicketsPage() {
               onClick={() => setTicketViewMode('INDIVIDUAL')}
               className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 ticketViewMode === 'INDIVIDUAL'
-                  ? 'bg-white text-navy-950 shadow-sm font-bold'
-                  : 'text-stone-600 hover:text-navy-950'
+                  ? 'bg-white dark:bg-[#1E293B] text-navy-950 dark:text-white shadow-sm font-bold'
+                  : 'text-stone-600 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white'
               }`}
             >
               <Ticket className="w-3.5 h-3.5 text-brand-600" />
@@ -132,7 +132,7 @@ export default function MyTicketsPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="h-56 bg-stone-200 animate-pulse rounded-3xl" />
+            <div key={n} className="h-56 bg-stone-200 dark:bg-slate-800 animate-pulse rounded-3xl" />
           ))}
         </div>
       ) : tickets.length === 0 ? (
@@ -153,33 +153,33 @@ export default function MyTicketsPage() {
             return (
               <div
                 key={group.key}
-                className={`p-6 rounded-3xl border bg-white shadow-sm flex flex-col justify-between transition-all ${
+                className={`p-6 rounded-3xl border bg-white dark:bg-[#111827] shadow-sm flex flex-col justify-between transition-all ${
                   group.status === 'VALID'
-                    ? 'border-stone-300 hover:border-brand-400'
+                    ? 'border-stone-300 dark:border-slate-800 hover:border-brand-400 dark:hover:border-brand-500'
                     : group.status === 'CHECKED_IN'
-                    ? 'border-emerald-200 bg-emerald-50/10'
-                    : 'border-rose-200 bg-rose-50/10 opacity-70'
+                    ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/10 dark:bg-emerald-950/20'
+                    : 'border-rose-200 dark:border-rose-800/60 bg-rose-50/10 dark:bg-rose-950/20 opacity-70'
                 }`}
               >
                 {/* Top Row */}
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400 block">
                         {group.ticketTypeName}
                       </span>
-                      <h3 className="font-serif font-bold text-lg text-stone-900 mt-0.5 line-clamp-1">
+                      <h3 className="font-serif font-bold text-lg text-stone-900 dark:text-white mt-0.5 line-clamp-1">
                         {group.eventName}
                       </h3>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge
                           variant="outline"
-                          className="bg-brand-50 text-brand-700 border-brand-200 gap-1 text-[11px] font-bold"
+                          className="bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300 border-brand-200 dark:border-brand-800 gap-1 text-[11px] font-bold"
                         >
                           <Users className="w-3 h-3" />
                           {group.tickets.length} {group.tickets.length === 1 ? 'SEAT' : 'SEATS'}
                         </Badge>
-                        <span className="font-mono text-xs text-stone-500">
+                        <span className="font-mono text-xs text-stone-500 dark:text-slate-400">
                           {firstTicket.ticketNumber}
                         </span>
                       </div>
@@ -199,8 +199,8 @@ export default function MyTicketsPage() {
                   </div>
 
                   {/* Allocated Seats Chips */}
-                  <div className="mt-3 bg-stone-50/80 p-2.5 rounded-2xl border border-stone-200/80 space-y-1.5">
-                    <span className="text-[11px] font-semibold text-stone-600 flex items-center gap-1.5">
+                  <div className="mt-3 bg-stone-50/80 dark:bg-slate-900/60 p-2.5 rounded-2xl border border-stone-200/80 dark:border-slate-800 space-y-1.5">
+                    <span className="text-[11px] font-semibold text-stone-600 dark:text-slate-300 flex items-center gap-1.5">
                       <Armchair className="w-3.5 h-3.5 text-brand-600" />
                       Assigned Seats ({group.tickets.length})
                     </span>
@@ -208,7 +208,7 @@ export default function MyTicketsPage() {
                       {group.tickets.map((t, idx) => (
                         <span
                           key={t.id}
-                          className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white border border-stone-200 rounded-lg text-xs font-mono text-stone-700 font-medium"
+                          className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white dark:bg-[#1E293B] border border-stone-200 dark:border-slate-700 rounded-lg text-xs font-mono text-stone-700 dark:text-slate-200 font-medium"
                         >
                           <Armchair className="w-3 h-3 text-stone-400" />
                           {t.seatNumber || `Seat ${idx + 1}`}
@@ -221,7 +221,7 @@ export default function MyTicketsPage() {
                   </div>
 
                   {/* Event Time & Venue */}
-                  <div className="space-y-1.5 py-3 mt-2 border-t border-stone-100 text-xs text-stone-600">
+                  <div className="space-y-1.5 py-3 mt-2 border-t border-stone-100 dark:border-slate-800 text-xs text-stone-600 dark:text-slate-400">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-3.5 h-3.5 text-stone-400 shrink-0" />
                       <span>{group.eventStartDate ? formatDate(group.eventStartDate) : 'Date TBA'}</span>
@@ -237,18 +237,18 @@ export default function MyTicketsPage() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="pt-4 border-t border-stone-100 flex items-center justify-between">
+                <div className="pt-4 border-t border-stone-100 dark:border-slate-800 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-slate-400 block">
                       Holder • {group.tickets.length > 1 ? `Total (${group.tickets.length} seats)` : 'Price'}
                     </span>
-                    <span className="text-xs font-semibold text-stone-800 block">
+                    <span className="text-xs font-semibold text-stone-800 dark:text-slate-200 block">
                       {group.attendeeName}
                     </span>
-                    <span className="text-xs font-bold text-navy-950">
+                    <span className="text-xs font-bold text-navy-950 dark:text-white">
                       {formatCurrency(totalGroupPrice)}
                       {group.tickets.length > 1 && (
-                        <span className="font-normal text-[11px] text-stone-400 ml-1">
+                        <span className="font-normal text-[11px] text-stone-400 dark:text-slate-400 ml-1">
                           ({formatCurrency(group.price)}/ea)
                         </span>
                       )}
@@ -282,28 +282,28 @@ export default function MyTicketsPage() {
           {tickets.map((t, idx) => (
             <div
               key={t.id}
-              className={`p-6 rounded-3xl border bg-white shadow-sm flex flex-col justify-between transition-all ${
+              className={`p-6 rounded-3xl border bg-white dark:bg-[#111827] shadow-sm flex flex-col justify-between transition-all ${
                 t.status === 'VALID'
-                  ? 'border-stone-300 hover:border-brand-400'
+                  ? 'border-stone-300 dark:border-slate-800 hover:border-brand-400 dark:hover:border-brand-500'
                   : t.status === 'CHECKED_IN'
-                  ? 'border-emerald-200 bg-emerald-50/10'
-                  : 'border-rose-200 bg-rose-50/10 opacity-70'
+                  ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/10 dark:bg-emerald-950/20'
+                  : 'border-rose-200 dark:border-rose-800/60 bg-rose-50/10 dark:bg-rose-950/20 opacity-70'
               }`}
             >
               {/* Top row */}
               <div className="flex items-start justify-between gap-3 mb-4">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400 block">
                     {t.ticketTypeName}
                   </span>
-                  <h3 className="font-serif font-bold text-base text-stone-900 mt-0.5 line-clamp-1">
+                  <h3 className="font-serif font-bold text-base text-stone-900 dark:text-white mt-0.5 line-clamp-1">
                     {t.eventName}
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="font-mono text-xs font-semibold text-stone-500">
+                    <span className="font-mono text-xs font-semibold text-stone-500 dark:text-slate-400">
                       {t.ticketNumber}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] text-brand-700 font-semibold">
+                    <span className="inline-flex items-center gap-1 text-[11px] text-brand-700 dark:text-brand-300 font-semibold">
                       <Armchair className="w-3 h-3" />
                       {t.seatNumber || `Seat ${idx + 1}`}
                     </span>
@@ -324,7 +324,7 @@ export default function MyTicketsPage() {
               </div>
 
               {/* Event time & venue */}
-              <div className="space-y-1.5 py-3 border-y border-stone-100 text-xs text-stone-600">
+              <div className="space-y-1.5 py-3 border-y border-stone-100 dark:border-slate-800 text-xs text-stone-600 dark:text-slate-400">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-3.5 h-3.5 text-stone-400 shrink-0" />
                   <span>{formatDate(t.eventStartDate)}</span>
@@ -341,11 +341,11 @@ export default function MyTicketsPage() {
               {/* Bottom bar & QR preview trigger */}
               <div className="pt-4 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400 block">
                     Holder
                   </span>
-                  <span className="text-xs font-semibold text-stone-800">{t.attendeeName}</span>
-                  <span className="block text-xs font-bold text-navy-950 mt-0.5">
+                  <span className="text-xs font-semibold text-stone-800 dark:text-slate-200">{t.attendeeName}</span>
+                  <span className="block text-xs font-bold text-navy-950 dark:text-white mt-0.5">
                     {formatCurrency(t.price)}
                   </span>
                 </div>
@@ -383,13 +383,13 @@ export default function MyTicketsPage() {
               <div className="flex flex-col items-center justify-center p-2 space-y-4">
                 {/* Multi-seat switcher pills */}
                 {group.tickets.length > 1 && (
-                  <div className="w-full bg-stone-50 p-2.5 rounded-2xl border border-stone-200 space-y-2">
+                  <div className="w-full bg-stone-50 dark:bg-slate-900/60 p-2.5 rounded-2xl border border-stone-200 dark:border-slate-800 space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-stone-700 flex items-center gap-1">
+                      <span className="font-semibold text-stone-700 dark:text-slate-300 flex items-center gap-1">
                         <Users className="w-3.5 h-3.5 text-brand-600" />
                         Select Seat ({group.tickets.length} Seats)
                       </span>
-                      <span className="text-[10px] text-stone-400">
+                      <span className="text-[10px] text-stone-400 dark:text-slate-500">
                         Click seat to show its gate pass
                       </span>
                     </div>
@@ -410,7 +410,7 @@ export default function MyTicketsPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all flex items-center gap-1.5 ${
                               isSelected
                                 ? 'bg-brand-600 text-white shadow-sm ring-2 ring-brand-300 font-bold'
-                                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
+                                : 'bg-white dark:bg-[#1E293B] text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800 border border-stone-200 dark:border-slate-700'
                             }`}
                           >
                             <Armchair className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-stone-400'}`} />
@@ -434,7 +434,7 @@ export default function MyTicketsPage() {
                   ) : (
                     <QrCode className="w-48 h-48 text-stone-300" />
                   )}
-                  <span className="font-mono text-xs text-stone-600 font-semibold mt-2">
+                  <span className="font-mono text-xs text-stone-700 font-semibold mt-2">
                     {currentTicket.seatNumber || `Seat ${selectedSeatIndex + 1}`} • {currentTicket.ticketNumber}
                   </span>
                   <span className="text-[10px] text-stone-400">
@@ -443,8 +443,8 @@ export default function MyTicketsPage() {
                 </div>
 
                 <div className="text-center space-y-1">
-                  <span className="text-xs text-stone-600 block">
-                    Tier: <strong className="text-stone-900">{group.ticketTypeName}</strong> • {currentTicket.attendeeName}
+                  <span className="text-xs text-stone-600 dark:text-slate-400 block">
+                    Tier: <strong className="text-stone-900 dark:text-white">{group.ticketTypeName}</strong> • {currentTicket.attendeeName}
                   </span>
                   <div className="pt-1">
                     <Badge
@@ -462,7 +462,7 @@ export default function MyTicketsPage() {
                   </div>
                 </div>
 
-                <div className="w-full pt-4 border-t border-stone-100 flex items-center justify-between">
+                <div className="w-full pt-4 border-t border-stone-100 dark:border-slate-800 flex items-center justify-between">
                   <Link href={`/bookings/${group.bookingId}`}>
                     <Button variant="outline" size="sm">
                       View Full Booking
@@ -502,10 +502,10 @@ export default function MyTicketsPage() {
             </div>
 
             <div className="text-center space-y-1">
-              <span className="font-mono text-sm font-bold text-stone-900 block">
+              <span className="font-mono text-sm font-bold text-stone-900 dark:text-white block">
                 {selectedSingleTicketForQR.ticketNumber}
               </span>
-              <span className="text-xs text-stone-500 block">
+              <span className="text-xs text-stone-500 dark:text-slate-400 block">
                 Tier: {selectedSingleTicketForQR.ticketTypeName} • {selectedSingleTicketForQR.seatNumber || 'Standard'} • {selectedSingleTicketForQR.attendeeName}
               </span>
               <div className="pt-2">
@@ -524,7 +524,7 @@ export default function MyTicketsPage() {
               </div>
             </div>
 
-            <div className="w-full pt-4 border-t border-stone-100 flex items-center justify-between">
+            <div className="w-full pt-4 border-t border-stone-100 dark:border-slate-800 flex items-center justify-between">
               <Link href={`/bookings/${selectedSingleTicketForQR.bookingId}`}>
                 <Button variant="outline" size="sm">
                   View Full Booking

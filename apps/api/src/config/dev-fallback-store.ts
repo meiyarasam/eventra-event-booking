@@ -1347,11 +1347,24 @@ class DevFallbackStore {
         confirmedBookingsCount: confirmedBookings.length,
         grossVolume,
       },
-      categories: this.categories.map((c) => ({
-        id: c.id,
-        name: c.name,
-        eventsCount: this.events.filter((e) => e.categoryId === c.id).length,
-      })),
+      categoryDistribution: this.categories.map((c) => {
+        const count = this.events.filter((e) => e.categoryId === c.id).length;
+        return {
+          id: c.id,
+          name: c.name,
+          count,
+          eventsCount: count,
+        };
+      }),
+      categories: this.categories.map((c) => {
+        const count = this.events.filter((e) => e.categoryId === c.id).length;
+        return {
+          id: c.id,
+          name: c.name,
+          count,
+          eventsCount: count,
+        };
+      }),
       recentUsers: this.users.slice(0, 5).map((u) => ({
         id: u.id,
         name: u.name,

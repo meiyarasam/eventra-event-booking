@@ -53,14 +53,14 @@ export default function OrganizerDashboardPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200 dark:border-slate-800">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-semibold mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-2">
             <Briefcase className="w-3.5 h-3.5" />
             <span>Organizer Management Suite</span>
           </div>
-          <h1 className="font-serif text-3xl font-bold text-navy-950">Organizer Dashboard</h1>
-          <p className="text-sm text-stone-500 mt-1">
+          <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Organizer Dashboard</h1>
+          <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
             Track real-time ticket sales, capacity fulfillment, and event admissions.
           </p>
         </div>
@@ -82,65 +82,65 @@ export default function OrganizerDashboardPage() {
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-        <Card className="border-slate-200 border-t-4 border-t-emerald-500 bg-gradient-to-b from-emerald-50/30 to-white shadow-sm hover:shadow-md transition-shadow">
+        <Card className="border-slate-200 dark:border-slate-800 border-t-4 border-t-emerald-500 bg-gradient-to-b from-emerald-50/30 to-white dark:from-emerald-950/20 dark:to-[#111827] shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between text-stone-400 mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
                 Gross Ticket Sales
               </span>
-              <IndianRupee className="w-4 h-4 text-emerald-600" />
+              <IndianRupee className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <span className="text-3xl font-extrabold text-navy-950 block">
+            <span className="text-3xl font-extrabold text-navy-950 dark:text-white block">
               {formatCurrency(summary.grossRevenue)}
             </span>
-            <span className="text-xs text-stone-500 mt-1 block">Across confirmed bookings</span>
+            <span className="text-xs text-stone-500 dark:text-slate-400 mt-1 block">Across confirmed bookings</span>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 border-t-4 border-t-brand-500 bg-gradient-to-b from-brand-50/30 to-white shadow-sm hover:shadow-md transition-shadow">
+        <Card className="border-slate-200 dark:border-slate-800 border-t-4 border-t-brand-500 bg-gradient-to-b from-brand-50/30 to-white dark:from-brand-950/20 dark:to-[#111827] shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between text-stone-400 mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-brand-800 dark:text-brand-300">
                 Tickets Sold
               </span>
-              <Ticket className="w-4 h-4 text-brand-600" />
+              <Ticket className="w-4 h-4 text-brand-600 dark:text-brand-400" />
             </div>
-            <span className="text-3xl font-extrabold text-navy-950 block">
+            <span className="text-3xl font-extrabold text-navy-950 dark:text-white block">
               {summary.totalSoldTickets}
             </span>
-            <span className="text-xs text-stone-500 mt-1 block">Confirmed seats issued</span>
+            <span className="text-xs text-stone-500 dark:text-slate-400 mt-1 block">Confirmed seats issued</span>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 border-t-4 border-t-sky-500 bg-gradient-to-b from-sky-50/30 to-white shadow-sm hover:shadow-md transition-shadow">
+        <Card className="border-slate-200 dark:border-slate-800 border-t-4 border-t-sky-500 bg-gradient-to-b from-sky-50/30 to-white dark:from-sky-950/20 dark:to-[#111827] shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between text-stone-400 mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-sky-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-300">
                 Check-in Rate
               </span>
-              <CheckCircle2 className="w-4 h-4 text-sky-600" />
+              <CheckCircle2 className="w-4 h-4 text-sky-600 dark:text-sky-400" />
             </div>
-            <span className="text-3xl font-extrabold text-navy-950 block">
+            <span className="text-3xl font-extrabold text-navy-950 dark:text-white block">
               {summary.checkInRatePercentage}%
             </span>
-            <span className="text-xs text-stone-500 mt-1 block">
+            <span className="text-xs text-stone-500 dark:text-slate-400 mt-1 block">
               {summary.totalCheckedIn} scanned admissions
             </span>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 border-t-4 border-t-purple-500 bg-gradient-to-b from-purple-50/30 to-white shadow-sm hover:shadow-md transition-shadow">
+        <Card className="border-slate-200 dark:border-slate-800 border-t-4 border-t-purple-500 bg-gradient-to-b from-purple-50/30 to-white dark:from-purple-950/20 dark:to-[#111827] shadow-sm hover:shadow-md transition-shadow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between text-stone-400 mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-purple-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-purple-800 dark:text-purple-300">
                 Active Events
               </span>
-              <Calendar className="w-4 h-4 text-purple-600" />
+              <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             </div>
-            <span className="text-3xl font-extrabold text-navy-950 block">
+            <span className="text-3xl font-extrabold text-navy-950 dark:text-white block">
               {summary.publishedEvents}
             </span>
-            <span className="text-xs text-stone-500 mt-1 block">
+            <span className="text-xs text-stone-500 dark:text-slate-400 mt-1 block">
               {summary.pendingEvents} pending moderation
             </span>
           </CardContent>
@@ -151,12 +151,12 @@ export default function OrganizerDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Sales by Event Chart */}
         <div className="lg:col-span-2 space-y-4">
-          <Card className="border-stone-200">
-            <CardHeader className="bg-stone-50/50 pb-4">
+          <Card className="border-stone-200 dark:border-slate-800">
+            <CardHeader className="bg-stone-50/50 dark:bg-slate-900/40 pb-4 border-b border-stone-100 dark:border-slate-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-base">Revenue by Event (₹)</CardTitle>
-                  <p className="text-xs text-stone-500 mt-0.5">
+                  <CardTitle className="text-base text-stone-900 dark:text-white">Revenue by Event (₹)</CardTitle>
+                  <p className="text-xs text-stone-500 dark:text-slate-400 mt-0.5">
                     Real-time performance from persistent PostgreSQL records.
                   </p>
                 </div>
@@ -164,25 +164,25 @@ export default function OrganizerDashboardPage() {
             </CardHeader>
             <CardContent className="pt-6">
               {eventPerformance.length === 0 ? (
-                <div className="h-64 flex items-center justify-center text-sm text-stone-400">
+                <div className="h-64 flex items-center justify-center text-sm text-stone-400 dark:text-slate-500">
                   No sales data recorded yet. Create an event to begin tracking performance.
                 </div>
               ) : (
                 <div className="h-72 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={eventPerformance} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
                       <XAxis
                         dataKey="title"
-                        tick={{ fontSize: 11, fill: '#64748B' }}
+                        tick={{ fontSize: 11, fill: '#94A3B8' }}
                         interval={0}
                         angle={-15}
                         textAnchor="end"
                       />
-                      <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
+                      <YAxis tick={{ fontSize: 11, fill: '#94A3B8' }} />
                       <Tooltip
                         formatter={(val: any) => [`₹${Number(val).toLocaleString('en-IN')}`, 'Revenue']}
-                        contentStyle={{ borderRadius: '12px', border: '1px solid #E2E8F0' }}
+                        contentStyle={{ borderRadius: '12px', border: '1px solid #334155', backgroundColor: '#0F172A', color: '#F8FAFC' }}
                       />
                       <Bar dataKey="revenue" fill="#EA580C" radius={[6, 6, 0, 0]} />
                     </BarChart>
@@ -195,29 +195,29 @@ export default function OrganizerDashboardPage() {
 
         {/* Recent Attendees / Bookings feed */}
         <div className="space-y-4">
-          <Card className="border-stone-200">
-            <CardHeader className="bg-stone-50/50 pb-3">
+          <Card className="border-stone-200 dark:border-slate-800">
+            <CardHeader className="bg-stone-50/50 dark:bg-slate-900/40 pb-3 border-b border-stone-100 dark:border-slate-800">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">Recent Bookings</CardTitle>
-                <Link href="/organizer/events" className="text-xs text-brand-600 font-semibold hover:underline">
+                <CardTitle className="text-base text-stone-900 dark:text-white">Recent Bookings</CardTitle>
+                <Link href="/organizer/events" className="text-xs text-brand-600 dark:text-brand-400 font-semibold hover:underline">
                   All
                 </Link>
               </div>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               {recentBookings.length === 0 ? (
-                <p className="text-xs text-stone-500 text-center py-6">
+                <p className="text-xs text-stone-500 dark:text-slate-400 text-center py-6">
                   No attendee bookings recorded yet.
                 </p>
               ) : (
                 recentBookings.slice(0, 5).map((b: any) => (
-                  <div key={b.id} className="p-3 rounded-xl bg-stone-50 border border-stone-100 text-xs space-y-1">
+                  <div key={b.id} className="p-3 rounded-xl bg-stone-50 dark:bg-slate-900/60 border border-stone-100 dark:border-slate-800 text-xs space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-stone-900">{b.attendeeName}</span>
-                      <span className="font-bold text-navy-950">{formatCurrency(b.totalAmount)}</span>
+                      <span className="font-semibold text-stone-900 dark:text-white">{b.attendeeName}</span>
+                      <span className="font-bold text-navy-950 dark:text-white">{formatCurrency(b.totalAmount)}</span>
                     </div>
-                    <div className="text-stone-500 truncate">{b.eventName}</div>
-                    <div className="flex items-center justify-between text-[10px] text-stone-400 pt-1">
+                    <div className="text-stone-500 dark:text-slate-400 truncate">{b.eventName}</div>
+                    <div className="flex items-center justify-between text-[10px] text-stone-400 dark:text-slate-500 pt-1">
                       <span>{b.ticketsCount} seat(s)</span>
                       <span>{formatDate(b.createdAt, { month: 'short', day: 'numeric' })}</span>
                     </div>

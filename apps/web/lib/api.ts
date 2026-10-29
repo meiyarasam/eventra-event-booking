@@ -100,8 +100,15 @@ export async function apiClient<T = any>(
             }
             processQueue(null);
             isRefreshing = false;
-            // Retry original request
-            return apiClient<T>(endpoint, options);
+            // FIX BUG-007: Strip any stale Authorization header from the original options
+            // before retrying so the fresh token from localStorage is used instead.
+            const retryOptions = { ...options };
+            if (retryOptions.headers) {
+              const cleanHeaders = new Headers(retryOptions.headers);
+              cleanHeaders.delete('Authorization');
+              retryOptions.headers = cleanHeaders;
+            }
+            return apiClient<T>(endpoint, retryOptions);
           } else {
             throw new Error('Refresh failed');
           }
@@ -115,7 +122,16 @@ export async function apiClient<T = any>(
         // Wait for active refresh
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: () => resolve(apiClient<T>(endpoint, options)),
+            // FIX BUG-007: Same stale-header fix applied to queued retries.
+            resolve: () => {
+              const retryOptions = { ...options };
+              if (retryOptions.headers) {
+                const cleanHeaders = new Headers(retryOptions.headers);
+                cleanHeaders.delete('Authorization');
+                retryOptions.headers = cleanHeaders;
+              }
+              resolve(apiClient<T>(endpoint, retryOptions));
+            },
             reject: (err) => reject(err),
           });
         });
@@ -137,7 +153,17 @@ export async function apiClient<T = any>(
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError(error.message || 'Network request failed', 0);
+    // FIX BUG-011: Distinguish network/offline errors (TypeError: Failed to fetch)
+    // from unexpected JS errors so users see an actionable message.
+    const isNetworkError =
+      error instanceof TypeError ||
+      error.message === 'Failed to fetch' ||
+      error.message === 'Network request failed' ||
+      error.name === 'AbortError';
+    const message = isNetworkError
+      ? 'Unable to reach the server. Please check your internet connection and try again.'
+      : error.message || 'An unexpected error occurred. Please try again.';
+    throw new ApiError(message, isNetworkError ? 0 : error.status || 0);
   }
 }
 

@@ -615,25 +615,25 @@ export default function AdminUsersManagementPage() {
 
             {/* Activity Statistics Metrics */}
             <div>
-              <h5 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Platform Metrics</h5>
+              <h5 className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-slate-400 mb-2">Platform Metrics</h5>
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-center">
-                  <span className="text-lg font-bold text-navy-950 block">
+                <div className="p-3 bg-stone-50 dark:bg-slate-800/80 rounded-xl border border-stone-200 dark:border-slate-700 text-center">
+                  <span className="text-lg font-bold text-slate-900 dark:text-white block">
                     {userDetails.stats?.bookingsCount || 0}
                   </span>
-                  <span className="text-[11px] text-stone-500 font-medium">Bookings Made</span>
+                  <span className="text-[11px] text-stone-500 dark:text-slate-400 font-medium">Bookings Made</span>
                 </div>
-                <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-center">
-                  <span className="text-lg font-bold text-navy-950 block">
+                <div className="p-3 bg-stone-50 dark:bg-slate-800/80 rounded-xl border border-stone-200 dark:border-slate-700 text-center">
+                  <span className="text-lg font-bold text-slate-900 dark:text-white block">
                     {userDetails.stats?.eventsCount || 0}
                   </span>
-                  <span className="text-[11px] text-stone-500 font-medium">Events Hosted</span>
+                  <span className="text-[11px] text-stone-500 dark:text-slate-400 font-medium">Events Hosted</span>
                 </div>
-                <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-center">
-                  <span className="text-lg font-bold text-navy-950 block">
+                <div className="p-3 bg-stone-50 dark:bg-slate-800/80 rounded-xl border border-stone-200 dark:border-slate-700 text-center">
+                  <span className="text-lg font-bold text-slate-900 dark:text-white block">
                     {formatCurrency(userDetails.stats?.totalSpent || 0)}
                   </span>
-                  <span className="text-[11px] text-stone-500 font-medium">Total Volume</span>
+                  <span className="text-[11px] text-stone-500 dark:text-slate-400 font-medium">Total Volume</span>
                 </div>
               </div>
             </div>

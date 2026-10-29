@@ -31,22 +31,22 @@ export default function BookingsListPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl font-bold text-navy-950">My Event Bookings</h1>
-          <p className="text-sm text-stone-500 mt-1">
+          <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">My Event Bookings</h1>
+          <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
             Review your confirmed tickets, order references, and digital QR passes.
           </p>
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-xl">
+        <div className="flex items-center gap-1.5 p-1 bg-stone-100 dark:bg-slate-800 rounded-xl">
           {(['ALL', 'CONFIRMED', 'CANCELLED'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setStatusFilter(tab)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 statusFilter === tab
-                  ? 'bg-white text-stone-900 shadow-sm'
-                  : 'text-stone-600 hover:text-stone-900'
+                  ? 'bg-white dark:bg-slate-700 text-stone-900 dark:text-white shadow-sm'
+                  : 'text-stone-600 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white'
               }`}
             >
               {tab === 'ALL' ? 'All Bookings' : tab === 'CONFIRMED' ? 'Booked' : 'Cancelled'}
@@ -59,12 +59,12 @@ export default function BookingsListPage() {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="h-32 bg-stone-200 animate-pulse rounded-2xl" />
+            <div key={n} className="h-32 bg-stone-200 dark:bg-slate-800 animate-pulse rounded-2xl" />
           ))}
         </div>
       ) : filteredBookings.length === 0 ? (
         <EmptyState
-          icon={<Ticket className="w-12 h-12 text-stone-400" />}
+          icon={<Ticket className="w-12 h-12 text-stone-400 dark:text-slate-500" />}
           title="No Bookings Found"
           description={
             statusFilter === 'ALL'
@@ -77,24 +77,28 @@ export default function BookingsListPage() {
       ) : (
         <div className="space-y-4">
           {filteredBookings.map((b) => (
-            <Card key={b.id} className="border-stone-200 hover:border-stone-300 transition-colors">
+            <Card key={b.id} className="border-stone-200 dark:border-slate-800 hover:border-stone-300 dark:hover:border-slate-700 transition-colors">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   {/* Left: Thumbnail and Event Details */}
                   <div className="flex items-start gap-4">
                     {b.event?.bannerUrl && (
-                      <div className="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 shrink-0">
+                      <div className="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 dark:bg-slate-800 shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={b.event.bannerUrl}
+                          src={b.event.bannerUrl || '/images/concert_crowd_bg.jpg'}
                           alt={b.event.title}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = '/images/concert_crowd_bg.jpg';
+                          }}
                           className="w-full h-full object-cover"
                         />
                       </div>
                     )}
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-mono text-xs font-bold text-stone-500">
+                        <span className="font-mono text-xs font-bold text-stone-500 dark:text-slate-400">
                           {b.bookingReference}
                         </span>
                         <Badge
@@ -105,13 +109,13 @@ export default function BookingsListPage() {
                         </Badge>
                       </div>
 
-                      <h3 className="font-serif text-lg font-bold text-stone-900 line-clamp-1">
+                      <h3 className="font-serif text-lg font-bold text-stone-900 dark:text-white line-clamp-1">
                         {b.event?.title}
                       </h3>
 
-                      <div className="flex items-center gap-4 text-xs text-stone-500 mt-2">
+                      <div className="flex items-center gap-4 text-xs text-stone-500 dark:text-slate-400 mt-2">
                         <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                          <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                           {b.event?.startDate ? formatDate(b.event.startDate, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Date TBA'}
                         </span>
                         <span>•</span>
@@ -121,12 +125,12 @@ export default function BookingsListPage() {
                   </div>
 
                   {/* Right: Total Price & CTA */}
-                  <div className="flex items-center justify-between md:justify-end gap-6 border-t md:border-t-0 pt-4 md:pt-0">
+                  <div className="flex items-center justify-between md:justify-end gap-6 border-t md:border-t-0 border-stone-100 dark:border-slate-800 pt-4 md:pt-0">
                     <div className="text-left md:text-right">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-stone-600 block">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-slate-400 block">
                         Total Settled
                       </span>
-                      <span className="text-lg font-bold text-navy-950">
+                      <span className="text-lg font-bold text-navy-950 dark:text-white">
                         {formatCurrency(b.totalAmount)}
                       </span>
                     </div>
@@ -134,7 +138,7 @@ export default function BookingsListPage() {
                     <Link href={`/bookings/${b.id}`}>
                       <Button variant="outline" size="sm" className="gap-1.5 font-semibold">
                         <span>View Pass & QR</span>
-                        <ArrowRight className="w-4 h-4 text-stone-500" />
+                        <ArrowRight className="w-4 h-4 text-stone-500 dark:text-slate-400" />
                       </Button>
                     </Link>
                   </div>

@@ -204,52 +204,55 @@ export class AuthService {
   ): Promise<boolean> {
     const email = user.email.toLowerCase();
 
-    // Support common seed/demo passwords and variations (with or without '!') for seamless dev evaluation
-    if (email === 'admin@eventra.com') {
-      const allowed = [
-        'adminpassword123!',
-        'adminpassword123',
-        'adminpassword',
-        'admin@123',
-        'admin123',
-        'admin',
-      ];
-      if (
-        allowed.includes(inputPassword.toLowerCase()) ||
-        inputPassword === 'AdminPassword123!' ||
-        inputPassword === 'AdminPassword123'
-      ) {
-        return true;
-      }
-    } else if (email === 'organizer@eventra.com') {
-      const allowed = [
-        'organizerpassword123!',
-        'organizerpassword123',
-        'organizer@123',
-        'organizer123',
-        'organizer',
-      ];
-      if (
-        allowed.includes(inputPassword.toLowerCase()) ||
-        inputPassword === 'OrganizerPassword123!' ||
-        inputPassword === 'OrganizerPassword123'
-      ) {
-        return true;
-      }
-    } else if (email === 'attendee@eventra.com') {
-      const allowed = [
-        'attendeepassword123!',
-        'attendeepassword123',
-        'attendee@123',
-        'attendee123',
-        'attendee',
-      ];
-      if (
-        allowed.includes(inputPassword.toLowerCase()) ||
-        inputPassword === 'AttendeePassword123!' ||
-        inputPassword === 'AttendeePassword123'
-      ) {
-        return true;
+    // FIX BUG-002: Seed/demo password bypass is ONLY active in non-production environments.
+    // Wrap with NODE_ENV guard to prevent trivially guessable passwords in production.
+    if (process.env.NODE_ENV !== 'production') {
+      if (email === 'admin@eventra.com') {
+        const allowed = [
+          'adminpassword123!',
+          'adminpassword123',
+          'adminpassword',
+          'admin@123',
+          'admin123',
+          'admin',
+        ];
+        if (
+          allowed.includes(inputPassword.toLowerCase()) ||
+          inputPassword === 'AdminPassword123!' ||
+          inputPassword === 'AdminPassword123'
+        ) {
+          return true;
+        }
+      } else if (email === 'organizer@eventra.com') {
+        const allowed = [
+          'organizerpassword123!',
+          'organizerpassword123',
+          'organizer@123',
+          'organizer123',
+          'organizer',
+        ];
+        if (
+          allowed.includes(inputPassword.toLowerCase()) ||
+          inputPassword === 'OrganizerPassword123!' ||
+          inputPassword === 'OrganizerPassword123'
+        ) {
+          return true;
+        }
+      } else if (email === 'attendee@eventra.com') {
+        const allowed = [
+          'attendeepassword123!',
+          'attendeepassword123',
+          'attendee@123',
+          'attendee123',
+          'attendee',
+        ];
+        if (
+          allowed.includes(inputPassword.toLowerCase()) ||
+          inputPassword === 'AttendeePassword123!' ||
+          inputPassword === 'AttendeePassword123'
+        ) {
+          return true;
+        }
       }
     }
 
@@ -536,14 +539,17 @@ export class AuthService {
       }
     } else {
       // Check OTP against fallback store or generic dev OTPs
+      // FIX BUG-010: Magic OTPs (123456, 999999, 000000) are ONLY valid in non-production environments.
       const fbUser = targetEmail
         ? devFallbackStore.users.find((u) => u.email.toLowerCase() === targetEmail!.toLowerCase())
         : devFallbackStore.users.find((u) => u.verificationOtp === tokenOrOtp);
 
+      const isMagicOtp =
+        process.env.NODE_ENV !== 'production' &&
+        (tokenOrOtp === '123456' || tokenOrOtp === '999999' || tokenOrOtp === '000000');
+
       const isValidDevOtp =
-        tokenOrOtp === '123456' ||
-        tokenOrOtp === '999999' ||
-        tokenOrOtp === '000000' ||
+        isMagicOtp ||
         (fbUser && fbUser.verificationOtp === tokenOrOtp);
 
       if (!isValidDevOtp) {
@@ -566,7 +572,15 @@ export class AuthService {
       if (!user) {
         throw AppError.notFound('Account not found.');
       }
-      (user as any).emailVerified = true;
+
+      // FIX BUG-001: Persist emailVerified to DB instead of only mutating in-memory object.
+      if (!user.emailVerified) {
+        await prisma.user.update({
+          where: { email: targetEmail.toLowerCase() },
+          data: { emailVerified: true },
+        });
+      }
+
       return {
         success: true,
         message: 'Your email address has been successfully verified! You now have full platform access.',
@@ -593,20 +607,44 @@ export class AuthService {
     const cleanEmail = email.toLowerCase();
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
+    // FIX BUG-006: Validate that the email belongs to a registered account before
+    // sending anything. Return 404 for unregistered emails rather than silently succeeding.
     let userName = 'User';
+    let userFound = false;
+
     try {
       const dbUser = await prisma.user.findUnique({
         where: { email: cleanEmail },
       });
       if (dbUser) {
         userName = dbUser.name;
+        userFound = true;
+        // If already verified, no need to resend
+        if (dbUser.emailVerified) {
+          return {
+            success: true,
+            message: 'Your email address is already verified. No action needed.',
+          };
+        }
       }
     } catch {
+      // DB unavailable — check fallback store
       const fbUser = devFallbackStore.users.find((u) => u.email.toLowerCase() === cleanEmail);
       if (fbUser) {
         userName = fbUser.name;
+        userFound = true;
         fbUser.verificationOtp = otpCode;
+        if (fbUser.emailVerified) {
+          return {
+            success: true,
+            message: 'Your email address is already verified. No action needed.',
+          };
+        }
       }
+    }
+
+    if (!userFound) {
+      throw AppError.notFound('No account found with this email address.');
     }
 
     const token = signAccessToken({
@@ -622,8 +660,7 @@ export class AuthService {
     return {
       success: true,
       message: 'A verification link and 6-digit OTP code have been sent to your email address.',
-      devOtp: otpCode,
-      devToken: token,
+      ...(process.env.NODE_ENV !== 'production' ? { devOtp: otpCode, devToken: token } : {}),
     };
   }
 }

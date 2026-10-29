@@ -88,15 +88,15 @@ export default function AdminCouponsPage() {
       <div>
         <Link
           href="/admin"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-2 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Admin Dashboard</span>
         </Link>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-navy-950">Promotions & Coupons</h1>
-            <p className="text-sm text-stone-500 mt-1">
+            <h1 className="font-serif text-3xl font-bold text-slate-900 dark:text-white">Promotions & Coupons</h1>
+            <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
               Create promotional discount codes and manage coupon redemption across checkout flows.
             </p>
           </div>
@@ -113,10 +113,10 @@ export default function AdminCouponsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {coupons.map((c) => (
-          <Card key={c.id} className="border-stone-200 shadow-sm hover:border-brand-400 transition-all">
+          <Card key={c.id} className="border-stone-200 dark:border-slate-800 bg-white dark:bg-[#111827] shadow-sm hover:border-brand-400 transition-all">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-lg font-black text-brand-600 tracking-wider">
+                <span className="font-mono text-lg font-black text-brand-600 dark:text-brand-400 tracking-wider">
                   {c.code}
                 </span>
                 <Badge variant={c.status === 'ACTIVE' ? 'success' : 'outline'} className="text-[10px] uppercase font-bold">
@@ -124,11 +124,11 @@ export default function AdminCouponsPage() {
                 </Badge>
               </div>
 
-              <p className="text-xs text-stone-600 leading-relaxed">{c.description}</p>
+              <p className="text-xs text-stone-600 dark:text-slate-300 leading-relaxed">{c.description}</p>
 
-              <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                <span>Usage: <strong>{c.usageCount}</strong> / {c.maxUses}</span>
-                <span className="text-emerald-700 font-semibold">Active</span>
+              <div className="pt-3 border-t border-stone-100 dark:border-slate-800 flex items-center justify-between text-xs text-stone-500 dark:text-slate-400">
+                <span>Usage: <strong className="text-stone-800 dark:text-slate-200">{c.usageCount}</strong> / {c.maxUses}</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-semibold">Active</span>
               </div>
             </CardContent>
           </Card>

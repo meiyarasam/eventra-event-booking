@@ -135,17 +135,17 @@ export default function NotificationsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200 dark:border-slate-800">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-serif text-3xl font-bold text-navy-950">Notification Center</h1>
+            <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Notification Center</h1>
             {unreadCount > 0 && (
               <Badge variant="brand" className="text-xs font-bold">
                 {unreadCount} Unread
               </Badge>
             )}
           </div>
-          <p className="text-sm text-stone-500 mt-1">
+          <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
             Stay informed about booking confirmations, organizer approvals, and ticket updates.
           </p>
         </div>
@@ -159,7 +159,7 @@ export default function NotificationsPage() {
               onClick={() => markAllReadMutation.mutate()}
               className="gap-1.5"
             >
-              <CheckCheck className="w-4 h-4 text-stone-500" />
+              <CheckCheck className="w-4 h-4 text-stone-500 dark:text-slate-400" />
               <span>Mark All as Read</span>
             </Button>
           )}
@@ -167,7 +167,7 @@ export default function NotificationsPage() {
             variant="ghost"
             size="sm"
             onClick={() => refetch()}
-            className="text-stone-500 hover:text-stone-800"
+            className="text-stone-500 hover:text-stone-800 dark:text-slate-400 dark:hover:text-white"
             aria-label="Refresh notifications"
           >
             <RefreshCw className="w-4 h-4" />
@@ -178,14 +178,14 @@ export default function NotificationsPage() {
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="h-20 bg-stone-200 animate-pulse rounded-2xl" />
+            <div key={n} className="h-20 bg-stone-200 dark:bg-slate-800 animate-pulse rounded-2xl" />
           ))}
         </div>
       ) : isError ? (
-        <div className="p-8 text-center bg-rose-50/50 rounded-2xl border border-rose-200 space-y-3">
+        <div className="p-8 text-center bg-rose-50/50 dark:bg-rose-950/30 rounded-2xl border border-rose-200 dark:border-rose-900/50 space-y-3">
           <AlertTriangle className="w-10 h-10 text-rose-500 mx-auto" />
-          <h3 className="text-base font-semibold text-rose-900">Failed to load notifications</h3>
-          <p className="text-xs text-rose-600 max-w-md mx-auto">
+          <h3 className="text-base font-semibold text-rose-900 dark:text-rose-200">Failed to load notifications</h3>
+          <p className="text-xs text-rose-600 dark:text-rose-400 max-w-md mx-auto">
             We encountered a problem loading your notification updates. Please check your connection and try again.
           </p>
           <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-1.5">
@@ -195,7 +195,7 @@ export default function NotificationsPage() {
         </div>
       ) : notifications.length === 0 ? (
         <EmptyState
-          icon={<Bell className="w-12 h-12 text-stone-400" />}
+          icon={<Bell className="w-12 h-12 text-stone-400 dark:text-slate-500" />}
           title="No Notifications"
           description="You are completely caught up! We will notify you when there are updates on your bookings or events."
         />
@@ -207,20 +207,20 @@ export default function NotificationsPage() {
               onClick={() => handleOpenNotification(n)}
               className={`p-5 rounded-2xl border transition-all cursor-pointer ${
                 !n.isRead
-                  ? 'bg-brand-50/30 border-brand-200 shadow-sm'
-                  : 'bg-white border-stone-200 hover:border-stone-300'
+                  ? 'bg-brand-50/40 dark:bg-brand-500/10 border-brand-200 dark:border-brand-500/30 shadow-sm'
+                  : 'bg-white dark:bg-[#111827] border-stone-200 dark:border-slate-800 hover:border-stone-300 dark:hover:border-slate-700'
               }`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-sm text-stone-900">{n.title}</h3>
+                    <h3 className="font-semibold text-sm text-stone-900 dark:text-white">{n.title}</h3>
                     {!n.isRead && (
                       <span className="w-2 h-2 rounded-full bg-brand-500 shrink-0" />
                     )}
                   </div>
-                  <p className="text-xs text-stone-600 leading-relaxed">{n.message}</p>
-                  <span className="text-[10px] text-stone-400 block pt-1">
+                  <p className="text-xs text-stone-600 dark:text-slate-300 leading-relaxed">{n.message}</p>
+                  <span className="text-[10px] text-stone-400 dark:text-slate-500 block pt-1">
                     {formatDate(n.createdAt, {
                       month: 'short',
                       day: 'numeric',
@@ -239,7 +239,7 @@ export default function NotificationsPage() {
                         e.stopPropagation();
                         handleOpenNotification(n);
                       }}
-                      className="text-xs gap-1 hover:bg-brand-50 hover:text-brand-700 hover:border-brand-300 transition-colors"
+                      className="text-xs gap-1 hover:bg-brand-50 dark:hover:bg-brand-500/20 hover:text-brand-700 dark:hover:text-brand-300 hover:border-brand-300 dark:hover:border-brand-500/40 transition-colors"
                     >
                       <span>View</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -253,7 +253,7 @@ export default function NotificationsPage() {
                         e.stopPropagation();
                         markReadMutation.mutate(n.id);
                       }}
-                      className="text-[11px] text-stone-500 hover:text-stone-800"
+                      className="text-[11px] text-stone-500 hover:text-stone-800 dark:text-slate-400 dark:hover:text-slate-200"
                     >
                       Mark read
                     </Button>

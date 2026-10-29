@@ -61,24 +61,24 @@ export default function EditProfilePage() {
       <div>
         <Link
           href="/profile"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Profile Overview</span>
         </Link>
-        <h1 className="font-serif text-3xl font-bold text-navy-950">Edit Profile</h1>
-        <p className="text-sm text-stone-500 mt-1">
+        <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Edit Profile</h1>
+        <p className="text-sm text-stone-500 dark:text-slate-400 mt-1">
           Update your public attendee information, contact details, and display preferences.
         </p>
       </div>
 
-      <Card className="border-stone-200 shadow-sm">
-        <CardHeader className="border-b border-stone-100">
+      <Card className="border-stone-200 dark:border-slate-800 shadow-sm">
+        <CardHeader className="border-b border-stone-100 dark:border-slate-800">
           <CardTitle className="text-lg">Account Details</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex items-center gap-6 pb-4 border-b border-stone-100">
+            <div className="flex items-center gap-6 pb-4 border-b border-stone-100 dark:border-slate-800">
               <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-brand-500 to-amber-500 text-white font-serif text-2xl font-bold flex items-center justify-center overflow-hidden shadow-inner shrink-0">
                 {avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -88,8 +88,8 @@ export default function EditProfilePage() {
                 )}
               </div>
               <div className="space-y-1">
-                <span className="text-sm font-semibold text-stone-900 block">Profile Picture</span>
-                <p className="text-xs text-stone-500">
+                <span className="text-sm font-semibold text-stone-900 dark:text-white block">Profile Picture</span>
+                <p className="text-xs text-stone-500 dark:text-slate-400">
                   Provide an image URL to customize your avatar across the platform.
                 </p>
               </div>
@@ -129,7 +129,7 @@ export default function EditProfilePage() {
               <span className="text-[11px] text-stone-400 dark:text-slate-400">Maximum 500 characters</span>
             </div>
 
-            <div className="pt-4 flex items-center justify-end gap-3 border-t border-stone-100">
+            <div className="pt-4 flex items-center justify-end gap-3 border-t border-stone-100 dark:border-slate-800">
               <Link href="/profile">
                 <Button variant="outline" type="button">
                   Cancel

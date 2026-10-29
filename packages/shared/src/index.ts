@@ -68,6 +68,8 @@ export const RegisterSchema = z.object({
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
+    // FIX BUG-009: Cap password length at 128 chars to prevent bcrypt CPU DoS.
+    .max(128, 'Password must not exceed 128 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number'),
   phone: z.string().optional(),
@@ -90,6 +92,8 @@ export const ResetPasswordSchema = z.object({
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
+    // FIX BUG-009: Cap password length at 128 chars to prevent bcrypt CPU DoS.
+    .max(128, 'Password must not exceed 128 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number'),
 });
@@ -125,6 +129,8 @@ export const ChangePasswordSchema = z.object({
   newPassword: z
     .string()
     .min(8, 'New password must be at least 8 characters')
+    // FIX BUG-009: Cap password length at 128 chars to prevent bcrypt CPU DoS.
+    .max(128, 'New password must not exceed 128 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number'),
 });

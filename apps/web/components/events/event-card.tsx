@@ -62,8 +62,12 @@ export function EventCard({ event, isSaved = false }: EventCardProps) {
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={event.bannerUrl}
+          src={event.bannerUrl || '/images/concert_crowd_bg.jpg'}
           alt={event.title}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/images/concert_crowd_bg.jpg';
+          }}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
           loading="lazy"
         />

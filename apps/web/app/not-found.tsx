@@ -7,15 +7,15 @@ export default function NotFound() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
       <div className="max-w-md w-full text-center space-y-5">
-        <div className="w-16 h-16 rounded-3xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto shadow-sm">
+        <div className="w-16 h-16 rounded-3xl bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 flex items-center justify-center mx-auto shadow-sm">
           <Compass className="w-8 h-8" />
         </div>
         <div className="space-y-2">
-          <span className="font-mono text-xs font-bold uppercase tracking-widest text-brand-600">
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400">
             Error 404
           </span>
-          <h1 className="font-serif text-3xl font-bold text-navy-950">Page Not Found</h1>
-          <p className="text-sm text-stone-500 leading-relaxed">
+          <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Page Not Found</h1>
+          <p className="text-sm text-stone-500 dark:text-slate-400 leading-relaxed">
             The page or event resource you are looking for does not exist or may have been moved.
           </p>
         </div>

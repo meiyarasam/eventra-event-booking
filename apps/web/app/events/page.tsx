@@ -293,8 +293,8 @@ function EventsExploreContent() {
 
       {/* Date Presets Row */}
       <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none text-xs">
-        <span className="text-slate-400 font-semibold uppercase tracking-wider text-[11px] whitespace-nowrap mr-1 flex items-center gap-1">
-          <Clock className="w-3.5 h-3.5 text-brand-400" /> Date:
+        <span className="text-stone-500 dark:text-slate-400 font-semibold uppercase tracking-wider text-[11px] whitespace-nowrap mr-1 flex items-center gap-1">
+          <Clock className="w-3.5 h-3.5 text-brand-500 dark:text-brand-400" /> Date:
         </span>
         {TIMEFRAME_PRESETS.map((p) => {
           const isActive = timeframe === p.id;
@@ -305,7 +305,7 @@ function EventsExploreContent() {
               className={`px-3.5 py-1.5 rounded-xl font-medium whitespace-nowrap transition-all border ${
                 isActive
                   ? 'bg-brand-500 text-white border-brand-500 shadow-md shadow-brand-500/20'
-                  : 'bg-[#111827] text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
+                  : 'bg-white dark:bg-[#111827] text-stone-700 dark:text-slate-300 border-stone-200 dark:border-slate-800 hover:border-stone-300 dark:hover:border-slate-700 hover:text-navy-950 dark:hover:text-white'
               }`}
             >
               {p.label}
@@ -481,17 +481,17 @@ function EventsExploreContent() {
         <div className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center border border-brand-500/30">
+              <div className="w-7 h-7 rounded-lg bg-brand-500/20 text-brand-500 dark:text-brand-400 flex items-center justify-center border border-brand-500/30">
                 <Sparkles className="w-4 h-4" />
               </div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-navy-950 dark:text-white tracking-tight">
                 Recommended For You
               </h2>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30 font-medium">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-brand-500/10 dark:bg-brand-500/20 text-brand-600 dark:text-brand-300 border border-brand-500/20 dark:border-brand-500/30 font-medium">
                 AI Match
               </span>
             </div>
-            <span className="text-xs text-slate-400">Based on your activity & trending events</span>
+            <span className="text-xs text-stone-500 dark:text-slate-400">Based on your activity & trending events</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -504,11 +504,11 @@ function EventsExploreContent() {
 
       {/* Events Results Section */}
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white tracking-tight">
+        <h2 className="text-xl font-bold text-navy-950 dark:text-white tracking-tight">
           All Events
         </h2>
         {meta.total > 0 && (
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-stone-500 dark:text-slate-400">
             {meta.total} {meta.total === 1 ? 'event' : 'events'} found
           </span>
         )}

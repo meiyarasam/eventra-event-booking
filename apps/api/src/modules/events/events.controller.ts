@@ -5,8 +5,12 @@ import { AppError } from '../../utils/app-error';
 export class EventsController {
   async getEvents(req: Request, res: Response, next: NextFunction) {
     try {
+      // FIX BUG-012: Sanitize search param — cap length at 200 chars and strip whitespace-only input.
+      const rawSearch = (req.query.search as string | undefined) || '';
+      const search = rawSearch.trim().slice(0, 200) || undefined;
+
       const options = {
-        search: req.query.search as string,
+        search,
         category: req.query.category as string,
         city: req.query.city as string,
         isOnline: req.query.isOnline !== undefined ? req.query.isOnline === 'true' : undefined,

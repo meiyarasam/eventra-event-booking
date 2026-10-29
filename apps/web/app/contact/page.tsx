@@ -33,13 +33,13 @@ export default function ContactUsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-xs font-bold uppercase tracking-widest text-brand-600 block">
+        <span className="text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400 block">
           Get in Touch
         </span>
-        <h1 className="font-serif text-4xl font-bold text-navy-950">
+        <h1 className="font-serif text-4xl font-bold text-navy-950 dark:text-white">
           We&apos;re Here to Help You Show Up
         </h1>
-        <p className="text-sm text-stone-600 leading-relaxed">
+        <p className="text-sm text-stone-600 dark:text-slate-300 leading-relaxed">
           Have questions about your booking, organizer onboarding, custom enterprise ticketing, or platform security? Reach out to our 24/7 dedicated support team.
         </p>
       </div>
@@ -47,47 +47,47 @@ export default function ContactUsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Contact Info Cards */}
         <div className="space-y-4">
-          <Card className="border-stone-200">
+          <Card className="border-stone-200 dark:border-slate-800">
             <CardContent className="p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 flex items-center justify-center">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif text-base font-bold text-stone-900">Email Support</h3>
-                <p className="text-xs text-stone-500 mt-0.5">Direct ticketing and payment support</p>
-                <a href="mailto:support@eventra.com" className="text-xs font-semibold text-brand-600 hover:underline block mt-2">
+                <h3 className="font-serif text-base font-bold text-stone-900 dark:text-white">Email Support</h3>
+                <p className="text-xs text-stone-500 dark:text-slate-400 mt-0.5">Direct ticketing and payment support</p>
+                <a href="mailto:support@eventra.com" className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline block mt-2">
                   support@eventra.com
                 </a>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-stone-200">
+          <Card className="border-stone-200 dark:border-slate-800">
             <CardContent className="p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                 <MessageSquare className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif text-base font-bold text-stone-900">Organizer Partnerships</h3>
-                <p className="text-xs text-stone-500 mt-0.5">Festival organizers and corporate hosts</p>
-                <a href="mailto:organizers@eventra.com" className="text-xs font-semibold text-blue-600 hover:underline block mt-2">
+                <h3 className="font-serif text-base font-bold text-stone-900 dark:text-white">Organizer Partnerships</h3>
+                <p className="text-xs text-stone-500 dark:text-slate-400 mt-0.5">Festival organizers and corporate hosts</p>
+                <a href="mailto:organizers@eventra.com" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline block mt-2">
                   organizers@eventra.com
                 </a>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-stone-200">
+          <Card className="border-stone-200 dark:border-slate-800">
             <CardContent className="p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-serif text-base font-bold text-stone-900">Live Support Hours</h3>
-                <p className="text-xs text-stone-500 mt-0.5">
+                <h3 className="font-serif text-base font-bold text-stone-900 dark:text-white">Live Support Hours</h3>
+                <p className="text-xs text-stone-500 dark:text-slate-400 mt-0.5">
                   Monday – Sunday: 24/7 Global Ticketing Desk
                 </p>
-                <span className="text-xs text-emerald-700 font-semibold block mt-2">
+                <span className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold block mt-2">
                   Average response time: &lt; 15 minutes
                 </span>
               </div>
@@ -97,18 +97,18 @@ export default function ContactUsPage() {
 
         {/* Contact Form */}
         <div className="lg:col-span-2">
-          <Card className="border-stone-200 shadow-md">
-            <CardHeader className="border-b border-stone-100">
-              <CardTitle className="text-xl">Send Us a Direct Message</CardTitle>
+          <Card className="border-stone-200 dark:border-slate-800 shadow-md">
+            <CardHeader className="border-b border-stone-100 dark:border-slate-800">
+              <CardTitle className="text-xl text-stone-900 dark:text-white">Send Us a Direct Message</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               {isSubmitted ? (
                 <div className="py-12 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                  <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="font-serif text-2xl font-bold text-stone-900">Inquiry Dispatched!</h3>
-                  <p className="text-sm text-stone-600 max-w-md mx-auto">
+                  <h3 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Inquiry Dispatched!</h3>
+                  <p className="text-sm text-stone-600 dark:text-slate-300 max-w-md mx-auto">
                     Thank you for reaching out, <strong>{name}</strong>. A member of our support team has received your ticket and will follow up at <strong>{email}</strong> shortly.
                   </p>
                   <Button variant="outline" size="sm" onClick={() => setIsSubmitted(false)}>

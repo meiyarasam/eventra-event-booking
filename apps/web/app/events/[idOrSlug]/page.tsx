@@ -113,14 +113,14 @@ export default function EventDetailPage() {
   if (isLoading) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16 animate-pulse space-y-8">
-        <div className="h-96 w-full bg-stone-200 rounded-3xl" />
+        <div className="h-96 w-full bg-stone-200 dark:bg-slate-800 rounded-3xl" />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
-            <div className="h-10 w-3/4 bg-stone-200 rounded-xl" />
-            <div className="h-4 w-1/2 bg-stone-200 rounded-lg" />
-            <div className="h-40 w-full bg-stone-200 rounded-2xl" />
+            <div className="h-10 w-3/4 bg-stone-200 dark:bg-slate-800 rounded-xl" />
+            <div className="h-4 w-1/2 bg-stone-200 dark:bg-slate-800 rounded-lg" />
+            <div className="h-40 w-full bg-stone-200 dark:bg-slate-800 rounded-2xl" />
           </div>
-          <div className="h-80 bg-stone-200 rounded-3xl" />
+          <div className="h-80 bg-stone-200 dark:bg-slate-800 rounded-3xl" />
         </div>
       </div>
     );
@@ -129,11 +129,11 @@ export default function EventDetailPage() {
   if (isError || !event) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-24 text-center">
-        <div className="p-4 bg-rose-50 text-rose-600 rounded-2xl inline-block mb-4">
+        <div className="p-4 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-2xl inline-block mb-4 border border-rose-200/50 dark:border-rose-900/50">
           <AlertCircle className="w-10 h-10" />
         </div>
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">Event Not Found</h2>
-        <p className="text-sm text-stone-500 mb-6">
+        <h2 className="text-2xl font-bold text-stone-900 dark:text-white mb-2">Event Not Found</h2>
+        <p className="text-sm text-stone-500 dark:text-slate-400 mb-6">
           The event you are looking for may have been removed, cancelled, or is pending approval.
         </p>
         <Button onClick={() => router.push('/events')}>Browse Other Events</Button>
@@ -147,8 +147,12 @@ export default function EventDetailPage() {
       <div className="relative h-72 sm:h-96 lg:h-[450px] w-full rounded-3xl overflow-hidden bg-stone-900 shadow-md mb-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={event.bannerUrl}
+          src={event.bannerUrl || '/images/hero_event_bg.jpg'}
           alt={event.title}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/images/hero_event_bg.jpg';
+          }}
           className="w-full h-full object-cover opacity-95"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

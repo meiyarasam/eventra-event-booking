@@ -28,20 +28,20 @@ export default function FAQPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
       <div className="text-center max-w-2xl mx-auto space-y-2">
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-navy-950">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-navy-950 dark:text-white">
           Frequently Asked Questions
         </h1>
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-stone-500 dark:text-slate-400">
           Everything you need to know about booking, reservations, and ticketing.
         </p>
       </div>
 
       <div className="space-y-4">
         {faqs.map((f, i) => (
-          <Card key={i} className="border-stone-200">
+          <Card key={i} className="border-stone-200 dark:border-slate-800">
             <CardContent className="p-6 space-y-2">
-              <h3 className="font-serif font-bold text-base text-stone-900">{f.q}</h3>
-              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">{f.a}</p>
+              <h3 className="font-serif font-bold text-base text-stone-900 dark:text-white">{f.q}</h3>
+              <p className="text-xs sm:text-sm text-stone-600 dark:text-slate-300 leading-relaxed">{f.a}</p>
             </CardContent>
           </Card>
         ))}

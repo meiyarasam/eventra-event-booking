@@ -129,8 +129,8 @@ export default function CheckoutPage() {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 animate-pulse space-y-6">
-        <div className="h-10 w-1/3 bg-stone-200 rounded-xl" />
-        <div className="h-64 bg-stone-200 rounded-3xl" />
+        <div className="h-10 w-1/3 bg-stone-200 dark:bg-slate-800 rounded-xl" />
+        <div className="h-64 bg-stone-200 dark:bg-slate-800 rounded-3xl" />
       </div>
     );
   }
@@ -138,11 +138,11 @@ export default function CheckoutPage() {
   if (isError || !reservation) {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center space-y-4">
-        <div className="p-4 rounded-2xl bg-rose-50 text-rose-600 inline-block">
+        <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 inline-block">
           <AlertTriangle className="w-10 h-10" />
         </div>
-        <h2 className="text-xl font-bold text-stone-900">Reservation Not Found or Expired</h2>
-        <p className="text-sm text-stone-500">
+        <h2 className="text-xl font-bold text-stone-900 dark:text-white">Reservation Not Found or Expired</h2>
+        <p className="text-sm text-stone-500 dark:text-slate-400">
           This reservation may have expired or does not belong to your account.
         </p>
         <Button onClick={() => router.push('/events')}>Find Other Events</Button>
@@ -155,11 +155,11 @@ export default function CheckoutPage() {
     const confirmedBookingId = (reservation as any).booking?.id;
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2">
+        <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-2">
           <CheckCircle2 className="w-8 h-8" />
         </div>
-        <h2 className="text-2xl font-bold text-stone-900">Booking Already Completed</h2>
-        <p className="text-sm text-stone-600">
+        <h2 className="text-2xl font-bold text-stone-900 dark:text-white">Booking Already Completed</h2>
+        <p className="text-sm text-stone-600 dark:text-slate-300">
           This reservation is already paid and marked as <strong>Booked</strong>. Duplicate payments are prevented.
         </p>
         <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -236,20 +236,20 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Direct Scan & Pay UPI QR Section */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="border-stone-200 shadow-sm overflow-hidden">
-            <CardHeader className="border-b border-stone-100 bg-stone-50/50 pb-4">
+          <Card className="border-stone-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <CardHeader className="border-b border-stone-100 dark:border-slate-800 bg-stone-50/50 dark:bg-slate-900/60 pb-4">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-xl flex items-center gap-2">
-                    <QrCode className="w-5 h-5 text-brand-600" />
+                    <QrCode className="w-5 h-5 text-brand-500" />
                     <span>Scan & Pay via UPI</span>
                   </CardTitle>
-                  <p className="text-xs text-stone-500 mt-1">
+                  <p className="text-xs text-stone-500 dark:text-slate-400 mt-1">
                     Scan with Google Pay, PhonePe, Paytm, BHIM, or any UPI banking app.
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 text-xs font-semibold">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>Verified Merchant</span>
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
 
             <CardContent className="pt-6 space-y-6">
               {/* Dynamic Amount Banner */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-stone-900 to-navy-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-stone-900 to-navy-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm border border-slate-800">
                 <div>
                   <span className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold block">
                     Total Amount Due for Tickets
@@ -282,8 +282,8 @@ export default function CheckoutPage() {
               </div>
 
               {/* Dynamic QR Code Centerpiece */}
-              <div className="flex flex-col items-center justify-center p-6 bg-stone-50/80 rounded-3xl border border-stone-200/90 text-center relative">
-                {/* QR Code Container */}
+              <div className="flex flex-col items-center justify-center p-6 bg-stone-50/80 dark:bg-slate-900/60 rounded-3xl border border-stone-200/90 dark:border-slate-800 text-center relative">
+                {/* QR Code Container (Kept clean white background for flawless optical scannability) */}
                 <div className="p-4 bg-white rounded-2xl border border-stone-200 shadow-md relative group">
                   <QRCodeSVG
                     value={upiQrPayload}
@@ -301,46 +301,46 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Amount Pill Below QR */}
-                <div className="mt-4 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200 text-xs font-bold shadow-sm">
-                  <Smartphone className="w-3.5 h-3.5 text-brand-600" />
+                <div className="mt-4 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-500/30 text-xs font-bold shadow-sm">
+                  <Smartphone className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
                   <span>Scan to pay exact amount: {formattedAmount}</span>
                 </div>
 
-                <p className="text-xs text-stone-500 mt-2 max-w-sm">
+                <p className="text-xs text-stone-500 dark:text-slate-400 mt-2 max-w-sm">
                   Amount is dynamically encoded in this QR code. Scanning will automatically pre-fill{' '}
-                  <strong className="text-stone-800">{formattedAmount}</strong> in your UPI app.
+                  <strong className="text-stone-800 dark:text-white">{formattedAmount}</strong> in your UPI app.
                 </p>
 
                 {/* Supported Apps Chips */}
-                <div className="mt-4 pt-4 border-t border-stone-200/70 w-full flex flex-wrap items-center justify-center gap-2 text-xs">
-                  <span className="text-[11px] text-stone-400 font-semibold uppercase tracking-wider mr-1">
+                <div className="mt-4 pt-4 border-t border-stone-200/70 dark:border-slate-800 w-full flex flex-wrap items-center justify-center gap-2 text-xs">
+                  <span className="text-[11px] text-stone-400 dark:text-slate-500 font-semibold uppercase tracking-wider mr-1">
                     Works With:
                   </span>
-                  <span className="px-2.5 py-1 bg-white border border-stone-200 rounded-lg text-stone-700 font-medium">
+                  <span className="px-2.5 py-1 bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-700 rounded-lg text-stone-700 dark:text-slate-200 font-medium">
                     Google Pay
                   </span>
-                  <span className="px-2.5 py-1 bg-white border border-stone-200 rounded-lg text-stone-700 font-medium">
+                  <span className="px-2.5 py-1 bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-700 rounded-lg text-stone-700 dark:text-slate-200 font-medium">
                     PhonePe
                   </span>
-                  <span className="px-2.5 py-1 bg-white border border-stone-200 rounded-lg text-stone-700 font-medium">
+                  <span className="px-2.5 py-1 bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-700 rounded-lg text-stone-700 dark:text-slate-200 font-medium">
                     Paytm
                   </span>
-                  <span className="px-2.5 py-1 bg-white border border-stone-200 rounded-lg text-stone-700 font-medium">
+                  <span className="px-2.5 py-1 bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-700 rounded-lg text-stone-700 dark:text-slate-200 font-medium">
                     BHIM UPI
                   </span>
-                  <span className="px-2.5 py-1 bg-white border border-stone-200 rounded-lg text-stone-700 font-medium">
+                  <span className="px-2.5 py-1 bg-white dark:bg-slate-800 border border-stone-200 dark:border-slate-700 rounded-lg text-stone-700 dark:text-slate-200 font-medium">
                     Cred
                   </span>
                 </div>
               </div>
 
               {/* UPI ID Quick Copy Box */}
-              <div className="p-3.5 rounded-xl bg-white border border-stone-200 flex items-center justify-between gap-3 text-xs">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900/80 border border-stone-200 dark:border-slate-800 flex items-center justify-between gap-3 text-xs">
                 <div className="space-y-0.5">
-                  <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
+                  <span className="text-[10px] uppercase font-bold text-stone-400 dark:text-slate-500 tracking-wider">
                     Or Pay to UPI ID (VPA)
                   </span>
-                  <div className="font-mono font-bold text-stone-900 text-sm">{UPI_ID}</div>
+                  <div className="font-mono font-bold text-stone-900 dark:text-white text-sm">{UPI_ID}</div>
                 </div>
                 <Button
                   type="button"
@@ -351,12 +351,12 @@ export default function CheckoutPage() {
                 >
                   {copiedUpi ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700">Copied</span>
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-emerald-700 dark:text-emerald-400">Copied</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-stone-500" />
+                      <Copy className="w-3.5 h-3.5 text-stone-500 dark:text-slate-400" />
                       <span>Copy UPI ID</span>
                     </>
                   )}
@@ -381,7 +381,7 @@ export default function CheckoutPage() {
                       : `I Have Paid`}
                   </span>
                 </Button>
-                <p className="text-center text-[11px] text-stone-500 mt-2">
+                <p className="text-center text-[11px] text-stone-500 dark:text-slate-400 mt-2">
                   Click after completing your payment to instantly confirm your booking.
                 </p>
               </div>
@@ -391,19 +391,19 @@ export default function CheckoutPage() {
 
         {/* Right Column: Order Summary */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="border-stone-200 shadow-sm sticky top-24">
-            <CardHeader className="bg-stone-50/50 pb-4">
-              <CardTitle className="text-base">Order Summary</CardTitle>
+          <Card className="border-stone-200 dark:border-slate-800 shadow-sm sticky top-24">
+            <CardHeader className="bg-stone-50/50 dark:bg-slate-900/60 pb-4 border-b border-stone-100 dark:border-slate-800">
+              <CardTitle className="text-base text-stone-900 dark:text-white">Order Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               {/* Event Mini Details */}
               {reservation.event && (
-                <div className="pb-4 border-b border-stone-100">
-                  <h4 className="font-serif font-bold text-stone-900 text-sm leading-snug">
+                <div className="pb-4 border-b border-stone-100 dark:border-slate-800">
+                  <h4 className="font-serif font-bold text-stone-900 dark:text-white text-sm leading-snug">
                     {reservation.event.title}
                   </h4>
-                  <div className="flex items-center gap-1.5 text-xs text-stone-500 mt-2">
-                    <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                  <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-slate-400 mt-2">
+                    <Calendar className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                     <span>
                       {formatDate(reservation.event.startDate, {
                         month: 'short',
@@ -412,8 +412,8 @@ export default function CheckoutPage() {
                       })}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-stone-500 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-stone-400" />
+                  <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-slate-400 mt-1">
+                    <MapPin className="w-3.5 h-3.5 text-stone-400 dark:text-slate-500" />
                     <span>
                       {reservation.event.city || (reservation.event.isOnline ? 'Online' : 'TBA')}
                     </span>
@@ -423,16 +423,16 @@ export default function CheckoutPage() {
 
               {/* Reserved Items */}
               <div className="space-y-2">
-                <span className="text-xs font-semibold text-stone-600 uppercase tracking-wider block mb-1">
+                <span className="text-xs font-semibold text-stone-600 dark:text-slate-400 uppercase tracking-wider block mb-1">
                   Reserved Ticket Types
                 </span>
                 {reservation.items.map((item, idx) => (
                   <div key={idx} className="flex items-center justify-between text-xs py-1">
                     <div>
-                      <span className="font-semibold text-stone-800">{item.ticketTypeName}</span>
-                      <span className="text-stone-400 ml-1.5">× {item.quantity}</span>
+                      <span className="font-semibold text-stone-800 dark:text-slate-200">{item.ticketTypeName}</span>
+                      <span className="text-stone-400 dark:text-slate-500 ml-1.5">× {item.quantity}</span>
                     </div>
-                    <span className="font-medium text-stone-900">
+                    <span className="font-medium text-stone-900 dark:text-white">
                       {formatCurrency(item.subtotal)}
                     </span>
                   </div>
@@ -440,25 +440,25 @@ export default function CheckoutPage() {
               </div>
 
               {/* Total Calculation */}
-              <div className="pt-4 border-t border-stone-200 space-y-2">
-                <div className="flex items-center justify-between text-xs text-stone-500">
+              <div className="pt-4 border-t border-stone-200 dark:border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-xs text-stone-500 dark:text-slate-400">
                   <span>Subtotal</span>
-                  <span>{formattedAmount}</span>
+                  <span className="text-stone-900 dark:text-white font-medium">{formattedAmount}</span>
                 </div>
-                <div className="flex items-center justify-between text-xs text-stone-500">
+                <div className="flex items-center justify-between text-xs text-stone-500 dark:text-slate-400">
                   <span>Platform Fee</span>
-                  <span className="text-emerald-700 font-medium">Free (₹0.00)</span>
+                  <span className="text-emerald-700 dark:text-emerald-400 font-medium">Free (₹0.00)</span>
                 </div>
-                <div className="flex items-center justify-between text-base font-bold text-navy-950 pt-2 border-t border-stone-100">
+                <div className="flex items-center justify-between text-base font-bold text-navy-950 dark:text-white pt-2 border-t border-stone-100 dark:border-slate-800">
                   <span>Amount to Pay</span>
-                  <span className="text-brand-600 font-mono text-lg">{formattedAmount}</span>
+                  <span className="text-brand-600 dark:text-brand-400 font-mono text-lg">{formattedAmount}</span>
                 </div>
               </div>
 
               {/* Security Note */}
               <div className="pt-2">
-                <div className="p-3 bg-stone-50 rounded-xl border border-stone-100 flex items-center gap-2 text-[11px] text-stone-500">
-                  <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <div className="p-3 bg-stone-50 dark:bg-slate-900/60 rounded-xl border border-stone-100 dark:border-slate-800 flex items-center gap-2 text-[11px] text-stone-500 dark:text-slate-400">
+                  <Lock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>256-bit encrypted checkout with instant ticket issuance.</span>
                 </div>
               </div>

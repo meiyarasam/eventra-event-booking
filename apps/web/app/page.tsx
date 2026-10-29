@@ -34,7 +34,7 @@ export default function HomePage() {
   const categories = categoriesData?.data || [];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0B0F19]">
+    <div className="flex flex-col min-h-screen bg-stone-50 dark:bg-[#0B0F19] transition-colors">
       {/* 1. HERO SECTION (Atmospheric live event photograph, pointer parallax, search & category navigation) */}
       <HeroSection categories={categories} />
 
@@ -45,7 +45,7 @@ export default function HomePage() {
       <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-500/25 to-transparent relative z-20" />
 
       {/* 3. PLATFORM ARCHITECTURE & TRUST PILLARS */}
-      <section className="py-20 sm:py-24 bg-gradient-to-b from-[#0A0F1D] via-[#0D1526] to-[#0A0F1D] border-t border-b border-slate-800/80 relative overflow-hidden">
+      <section className="py-20 sm:py-24 bg-stone-100 dark:bg-gradient-to-b dark:from-[#0A0F1D] dark:via-[#0D1526] dark:to-[#0A0F1D] border-t border-b border-stone-200 dark:border-slate-800/80 relative overflow-hidden">
         {/* Ambient lighting glows */}
         <div className="absolute top-0 right-1/4 w-[600px] h-[400px] bg-indigo-500/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-[600px] h-[400px] bg-brand-500/10 rounded-full blur-[140px] pointer-events-none" />
@@ -54,66 +54,66 @@ export default function HomePage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-400 block mb-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400 block mb-2">
               Enterprise Ticketing Infrastructure
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-navy-950 dark:text-white tracking-tight mb-3">
               Built for Absolute Reliability
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-stone-600 dark:text-slate-400 font-normal leading-relaxed">
               Every reservation on EVENTRA is protected by deterministic database locks, preventing oversold seats, ghost reservations, and duplicate passes.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Pillar 1 */}
-            <div className="p-6 rounded-2xl bg-[#111827] border border-slate-800 hover:border-brand-500/50 hover:bg-[#162032] hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center mb-5">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-stone-200 dark:border-slate-800 hover:border-brand-500/50 hover:bg-stone-50 dark:hover:bg-[#162032] hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-500 dark:text-brand-400 flex items-center justify-center mb-5">
                 <Lock className="w-6 h-6" />
               </div>
-              <h3 className="font-serif text-lg font-bold text-white mb-2">
+              <h3 className="font-serif text-lg font-bold text-navy-950 dark:text-white mb-2">
                 10-Minute Concurrency Holds
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
+              <p className="text-xs text-stone-600 dark:text-slate-400 leading-relaxed font-normal">
                 Atomic database row locking reserves seats during checkout, guaranteeing tickets cannot be double-booked during flash sales.
               </p>
             </div>
 
             {/* Pillar 2 */}
-            <div className="p-6 rounded-2xl bg-[#111827] border border-slate-800 hover:border-indigo-500/50 hover:bg-[#162032] hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-5">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-stone-200 dark:border-slate-800 hover:border-indigo-500/50 hover:bg-stone-50 dark:hover:bg-[#162032] hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400 flex items-center justify-center mb-5">
                 <QrCode className="w-6 h-6" />
               </div>
-              <h3 className="font-serif text-lg font-bold text-white mb-2">
+              <h3 className="font-serif text-lg font-bold text-navy-950 dark:text-white mb-2">
                 Cryptographic QR Passes
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
+              <p className="text-xs text-stone-600 dark:text-slate-400 leading-relaxed font-normal">
                 Single-use dynamic digital passes verifiable in milliseconds with instant duplicate check-in rejection at venue turnstiles.
               </p>
             </div>
 
             {/* Pillar 3 */}
-            <div className="p-6 rounded-2xl bg-[#111827] border border-slate-800 hover:border-emerald-500/50 hover:bg-[#162032] hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-5">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-stone-200 dark:border-slate-800 hover:border-emerald-500/50 hover:bg-stone-50 dark:hover:bg-[#162032] hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 flex items-center justify-center mb-5">
                 <CreditCard className="w-6 h-6" />
               </div>
-              <h3 className="font-serif text-lg font-bold text-white mb-2">
+              <h3 className="font-serif text-lg font-bold text-navy-950 dark:text-white mb-2">
                 Deterministic Mock Checkout
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
+              <p className="text-xs text-stone-600 dark:text-slate-400 leading-relaxed font-normal">
                 Realistic sandbox settlement environment supporting Card and UPI simulation without storing sensitive banking credentials.
               </p>
             </div>
 
             {/* Pillar 4 */}
-            <div className="p-6 rounded-2xl bg-[#111827] border border-slate-800 hover:border-amber-500/50 hover:bg-[#162032] hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-5">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-stone-200 dark:border-slate-800 hover:border-amber-500/50 hover:bg-stone-50 dark:hover:bg-[#162032] hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center mb-5">
                 <BarChart3 className="w-6 h-6" />
               </div>
-              <h3 className="font-serif text-lg font-bold text-white mb-2">
+              <h3 className="font-serif text-lg font-bold text-navy-950 dark:text-white mb-2">
                 Live Revenue Telemetry
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
+              <p className="text-xs text-stone-600 dark:text-slate-400 leading-relaxed font-normal">
                 Real-time gross merchandise volume, seat inventory tracking, and attendance rate telemetry for event creators.
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function HomePage() {
       </section>
 
       {/* 4. ORGANIZER CALL TO ACTION BANNER */}
-      <section className="py-20 sm:py-24 bg-[#0A0F1D] text-white relative overflow-hidden">
+      <section className="py-20 sm:py-24 bg-stone-50 dark:bg-[#0A0F1D] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-dot-pattern-dark opacity-20 pointer-events-none" />
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />

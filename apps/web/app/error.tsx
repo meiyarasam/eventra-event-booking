@@ -18,15 +18,15 @@ export default function ErrorPage({
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
       <div className="max-w-md w-full text-center space-y-5">
-        <div className="w-16 h-16 rounded-3xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto shadow-sm">
+        <div className="w-16 h-16 rounded-3xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto shadow-sm">
           <AlertCircle className="w-8 h-8" />
         </div>
         <div className="space-y-2">
-          <span className="font-mono text-xs font-bold uppercase tracking-widest text-rose-600">
+          <span className="font-mono text-xs font-bold uppercase tracking-widest text-rose-600 dark:text-rose-400">
             System Alert
           </span>
-          <h1 className="font-serif text-3xl font-bold text-navy-950">Something went wrong</h1>
-          <p className="text-sm text-stone-500 leading-relaxed">
+          <h1 className="font-serif text-3xl font-bold text-navy-950 dark:text-white">Something went wrong</h1>
+          <p className="text-sm text-stone-500 dark:text-slate-400 leading-relaxed">
             An unexpected error occurred while rendering this view. Our client state has safely trapped the exception.
           </p>
         </div>
