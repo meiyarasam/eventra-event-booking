@@ -54,7 +54,12 @@ export default function AboutPage() {
             </Button>
           </Link>
           <Link href="/contact">
-            <Button variant="outline" size="lg" className="border-slate-700 text-slate-200 hover:text-white hover:bg-slate-800">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-slate-700/80 bg-slate-900/90 hover:bg-slate-800 text-white hover:text-white font-semibold backdrop-blur-md shadow-md hover:border-slate-600 gap-2 transition-all"
+            >
+              <Mail className="w-4 h-4 text-brand-400" />
               <span>Contact Platform Support</span>
             </Button>
           </Link>
