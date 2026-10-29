@@ -10,7 +10,12 @@ export const env = {
   PORT: parseInt(process.env.PORT || '5000', 10),
   API_PREFIX: process.env.API_PREFIX || '/api/v1',
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
-  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || undefined,
+  COOKIE_DOMAIN:
+    process.env.COOKIE_DOMAIN &&
+    process.env.COOKIE_DOMAIN !== 'localhost' &&
+    process.env.COOKIE_DOMAIN !== 'undefined'
+      ? process.env.COOKIE_DOMAIN
+      : undefined,
   DATABASE_URL: process.env.DATABASE_URL || 'postgresql://neondb_owner:password@ep-sample-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require',
   DIRECT_URL: process.env.DIRECT_URL || process.env.DATABASE_URL,
   JWT_SECRET: process.env.JWT_SECRET || 'eventra_development_jwt_secret_min_32_characters_long_12345',

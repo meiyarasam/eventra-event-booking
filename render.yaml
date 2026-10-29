@@ -1,0 +1,58 @@
+# ==============================================================================
+# EVENTRA — Render Blueprint Specification (render.yaml)
+# Docs: https://render.com/docs/blueprint-spec
+# ==============================================================================
+
+services:
+  # EVENTRA Backend REST API Web Service
+  - type: web
+    name: eventra-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build:shared && npm --workspace=apps/api run build
+    startCommand: npm --workspace=apps/api run start
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: API_PREFIX
+        value: /api/v1
+      - key: FRONTEND_URL
+        sync: false # Set to your Vercel URL (e.g. https://your-project.vercel.app)
+      - key: DATABASE_URL
+        sync: false # Set to your Neon PostgreSQL pooled connection string
+      - key: DIRECT_URL
+        sync: false # Set to your Neon PostgreSQL direct connection string
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRATION
+        value: 15m
+      - key: JWT_REFRESH_EXPIRATION
+        value: 7d
+      - key: ADMIN_NAME
+        value: Admin Eventra
+      - key: ADMIN_EMAIL
+        value: admin@eventra.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ORGANIZER_NAME
+        value: Sarah Organizer
+      - key: ORGANIZER_EMAIL
+        value: organizer@eventra.com
+      - key: ORGANIZER_PASSWORD
+        sync: false
+      - key: ATTENDEE_NAME
+        value: Alex Attendee
+      - key: ATTENDEE_EMAIL
+        value: attendee@eventra.com
+      - key: ATTENDEE_PASSWORD
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+
