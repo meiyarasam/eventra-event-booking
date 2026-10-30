@@ -23,6 +23,10 @@ function VerifyEmailForm() {
   const [email, setEmail] = useState(emailFromUrl);
   const [isVerified, setIsVerified] = useState(false);
 
+  const isDemoMode =
+    process.env.NEXT_PUBLIC_ENABLE_DEMO_OTP === 'true' ||
+    (process.env.NODE_ENV !== 'production' && process.env.NEXT_PUBLIC_ENABLE_DEMO_OTP !== 'false');
+
   const verifyMutation = useMutation({
     mutationFn: (payload: { tokenOrOtp: string; email?: string }) =>
       api.post<{ success: boolean; message: string }>('/auth/verify-email', payload),
@@ -116,14 +120,20 @@ function VerifyEmailForm() {
                     maxLength={30}
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value)}
-                    placeholder="123456"
+                    placeholder={isDemoMode ? "123456" : "000000"}
                     className="w-full px-4 py-3.5 text-center font-mono text-2xl tracking-widest font-bold rounded-xl border border-stone-300 dark:border-slate-700 bg-white dark:bg-[#1E293B] text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition-all shadow-inner"
                     required
                   />
                   <div className="flex items-center justify-between text-xs text-stone-500 dark:text-slate-400 pt-1">
-                    <span>
-                      Demo code: <strong className="text-stone-800 dark:text-brand-300 font-mono bg-stone-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-stone-200 dark:border-slate-700">123456</strong>
-                    </span>
+                    {isDemoMode ? (
+                      <span>
+                        Demo code: <strong className="text-stone-800 dark:text-brand-300 font-mono bg-stone-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-stone-200 dark:border-slate-700">123456</strong>
+                      </span>
+                    ) : (
+                      <span className="text-stone-400 dark:text-slate-500">
+                        Check your email for the 6-digit code
+                      </span>
+                    )}
                     <Link href="/resend-verification" className="text-brand-600 dark:text-brand-400 hover:underline font-semibold">
                       Resend Code
                     </Link>

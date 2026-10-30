@@ -5,6 +5,7 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToke
 import { RegisterInput, LoginInput, UserRole, AccountStatus, UserDTO } from '@eventra/shared';
 import { devFallbackStore, isPrismaConnectionError } from '../../config/dev-fallback-store';
 import { emailService } from '../../services/email.service';
+import { verificationStore } from './verification-store';
 
 export class AuthService {
   private formatUser(user: any): UserDTO {
@@ -23,7 +24,9 @@ export class AuthService {
   }
 
   async register(input: RegisterInput) {
+    const cleanEmail = input.email.toLowerCase().trim();
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    verificationStore.saveCode(cleanEmail, otpCode);
 
     if (!isDatabaseConnected) {
       await devFallbackStore.init();
@@ -529,34 +532,49 @@ export class AuthService {
   }
 
   async verifyEmail(tokenOrOtp: string, email?: string) {
-    let targetEmail = email;
-    if (tokenOrOtp.length > 20) {
+    let targetEmail = email ? email.toLowerCase().trim() : undefined;
+    const cleanTokenOrOtp = tokenOrOtp.trim();
+
+    if (cleanTokenOrOtp.length > 20) {
+      // JWT token link verification (cryptographically signed)
       try {
-        const payload = verifyAccessToken(tokenOrOtp);
-        targetEmail = payload.email || targetEmail;
+        const payload = verifyAccessToken(cleanTokenOrOtp);
+        targetEmail = (payload.email || targetEmail)?.toLowerCase().trim();
       } catch {
         throw AppError.badRequest('Invalid or expired verification token.');
       }
     } else {
-      // Check OTP against fallback store or generic dev OTPs
-      // FIX BUG-010: Magic OTPs (123456, 999999, 000000) are ONLY valid in non-production environments.
-      const fbUser = targetEmail
-        ? devFallbackStore.users.find((u) => u.email.toLowerCase() === targetEmail!.toLowerCase())
-        : devFallbackStore.users.find((u) => u.verificationOtp === tokenOrOtp);
-
-      const isMagicOtp =
-        process.env.NODE_ENV !== 'production' &&
-        (tokenOrOtp === '123456' || tokenOrOtp === '999999' || tokenOrOtp === '000000');
-
-      const isValidDevOtp =
-        isMagicOtp ||
-        (fbUser && fbUser.verificationOtp === tokenOrOtp);
-
-      if (!isValidDevOtp) {
-        throw AppError.badRequest('Invalid verification code. Please enter the valid 6-digit code or request a new one.');
+      // 6-digit OTP code verification
+      if (!targetEmail) {
+        throw AppError.badRequest('Email address is required for verification.');
       }
-      if (fbUser && !targetEmail) {
-        targetEmail = fbUser.email;
+
+      // Check demo mode rules: ONLY for pre-configured demo accounts when demo mode is active.
+      // In production, demo mode is disabled by default to protect real accounts.
+      const isDemoAllowed =
+        process.env.ENABLE_DEMO_OTP === 'true' ||
+        (process.env.NODE_ENV !== 'production' && process.env.ENABLE_DEMO_OTP !== 'false');
+
+      const isDemoAccount =
+        targetEmail === 'attendee@eventra.com' ||
+        targetEmail === 'organizer@eventra.com' ||
+        targetEmail === 'admin@eventra.com';
+
+      const isMagicOtp = isDemoAllowed && isDemoAccount && (cleanTokenOrOtp === '123456' || cleanTokenOrOtp === '999999');
+
+      if (isMagicOtp) {
+        verificationStore.invalidateCode(targetEmail);
+      } else {
+        const verifyResult = verificationStore.verifyCode(targetEmail, cleanTokenOrOtp);
+        if (!verifyResult.valid) {
+          if (verifyResult.reason === 'EXPIRED') {
+            throw AppError.badRequest('Verification code has expired. Please request a new one.');
+          }
+          if (verifyResult.reason === 'MAX_ATTEMPTS') {
+            throw AppError.badRequest('Too many incorrect attempts. Please request a new verification code.');
+          }
+          throw AppError.badRequest('Invalid verification code. Please enter the valid 6-digit code or request a new one.');
+        }
       }
     }
 
@@ -564,19 +582,32 @@ export class AuthService {
       throw AppError.badRequest('Email address is required for verification.');
     }
 
+    if (!isDatabaseConnected) {
+      await devFallbackStore.init();
+      const user = devFallbackStore.users.find((u) => u.email.toLowerCase() === targetEmail);
+      if (!user) {
+        throw AppError.notFound('Account not found.');
+      }
+      user.emailVerified = true;
+      return {
+        success: true,
+        message: 'Your email address has been successfully verified! You now have full platform access.',
+        user: { ...this.formatUser(user), emailVerified: true },
+      };
+    }
+
     try {
       const user = await prisma.user.findUnique({
-        where: { email: targetEmail.toLowerCase() },
+        where: { email: targetEmail },
         include: { profile: true },
       });
       if (!user) {
         throw AppError.notFound('Account not found.');
       }
 
-      // FIX BUG-001: Persist emailVerified to DB instead of only mutating in-memory object.
       if (!user.emailVerified) {
         await prisma.user.update({
-          where: { email: targetEmail.toLowerCase() },
+          where: { email: targetEmail },
           data: { emailVerified: true },
         });
       }
@@ -588,7 +619,8 @@ export class AuthService {
       };
     } catch (error) {
       if (isPrismaConnectionError(error)) {
-        const user = devFallbackStore.users.find((u) => u.email.toLowerCase() === targetEmail!.toLowerCase());
+        await devFallbackStore.init();
+        const user = devFallbackStore.users.find((u) => u.email.toLowerCase() === targetEmail);
         if (!user) {
           throw AppError.notFound('Account not found.');
         }
@@ -612,23 +644,8 @@ export class AuthService {
     let userName = 'User';
     let userFound = false;
 
-    try {
-      const dbUser = await prisma.user.findUnique({
-        where: { email: cleanEmail },
-      });
-      if (dbUser) {
-        userName = dbUser.name;
-        userFound = true;
-        // If already verified, no need to resend
-        if (dbUser.emailVerified) {
-          return {
-            success: true,
-            message: 'Your email address is already verified. No action needed.',
-          };
-        }
-      }
-    } catch {
-      // DB unavailable — check fallback store
+    if (!isDatabaseConnected) {
+      await devFallbackStore.init();
       const fbUser = devFallbackStore.users.find((u) => u.email.toLowerCase() === cleanEmail);
       if (fbUser) {
         userName = fbUser.name;
@@ -641,11 +658,45 @@ export class AuthService {
           };
         }
       }
+    } else {
+      try {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: cleanEmail },
+        });
+        if (dbUser) {
+          userName = dbUser.name;
+          userFound = true;
+          // If already verified, no need to resend
+          if (dbUser.emailVerified) {
+            return {
+              success: true,
+              message: 'Your email address is already verified. No action needed.',
+            };
+          }
+        }
+      } catch {
+        // DB unavailable — check fallback store
+        const fbUser = devFallbackStore.users.find((u) => u.email.toLowerCase() === cleanEmail);
+        if (fbUser) {
+          userName = fbUser.name;
+          userFound = true;
+          fbUser.verificationOtp = otpCode;
+          if (fbUser.emailVerified) {
+            return {
+              success: true,
+              message: 'Your email address is already verified. No action needed.',
+            };
+          }
+        }
+      }
     }
 
     if (!userFound) {
       throw AppError.notFound('No account found with this email address.');
     }
+
+    // Persist active code and invalidate any previous code
+    verificationStore.saveCode(cleanEmail, otpCode);
 
     const token = signAccessToken({
       userId: 'verification-request',

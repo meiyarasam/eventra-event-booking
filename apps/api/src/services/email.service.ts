@@ -99,7 +99,11 @@ export class EmailService {
 
     // Dev mode / Fallback log
     console.log(`📨 [EMAIL DISPATCH TO: ${options.to}]`);
-    console.log(`   Subject: ${options.subject}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`   Subject: ${options.subject}`);
+    } else {
+      console.log(`   Subject: [REDACTED IN PRODUCTION]`);
+    }
     console.log(`   Email ID: ${emailId}`);
 
     return { success: true, messageId: emailId, simulated: true };
