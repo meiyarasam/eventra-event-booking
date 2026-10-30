@@ -5,7 +5,6 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken, verifyAccessToke
 import { RegisterInput, LoginInput, UserRole, AccountStatus, UserDTO } from '@eventra/shared';
 import { devFallbackStore, isPrismaConnectionError } from '../../config/dev-fallback-store';
 import { emailService } from '../../services/email.service';
-import { isMockEmailVerificationEnabled } from '../../config/env';
 import { verificationStore } from './verification-store';
 
 export class AuthService {
@@ -26,8 +25,7 @@ export class AuthService {
 
   async register(input: RegisterInput) {
     const cleanEmail = input.email.toLowerCase().trim();
-    const mockMode = isMockEmailVerificationEnabled();
-    const otpCode = mockMode ? '123456' : Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     verificationStore.saveCode(cleanEmail, otpCode);
 
     if (!isDatabaseConnected) {
@@ -551,18 +549,18 @@ export class AuthService {
         throw AppError.badRequest('Email address is required for verification.');
       }
 
-
+      // Check demo mode rules: ONLY for pre-configured demo accounts when demo mode is active.
       // In production, demo mode is disabled by default to protect real accounts.
-      const isDemoAllowed = isMockEmailVerificationEnabled(); // mock mode
+      const isDemoAllowed =
+        process.env.ENABLE_DEMO_OTP === 'true' ||
+        (process.env.NODE_ENV !== 'production' && process.env.ENABLE_DEMO_OTP !== 'false');
 
+      const isDemoAccount =
+        targetEmail === 'attendee@eventra.com' ||
+        targetEmail === 'organizer@eventra.com' ||
+        targetEmail === 'admin@eventra.com';
 
-
-
-
-
-
-
-      const isMagicOtp = isDemoAllowed && (cleanTokenOrOtp === '123456');
+      const isMagicOtp = isDemoAllowed && isDemoAccount && (cleanTokenOrOtp === '123456' || cleanTokenOrOtp === '999999');
 
       if (isMagicOtp) {
         verificationStore.invalidateCode(targetEmail);
@@ -639,8 +637,7 @@ export class AuthService {
 
   async resendVerification(email: string) {
     const cleanEmail = email.toLowerCase();
-    const mockMode = isMockEmailVerificationEnabled();
-    const otpCode = mockMode ? '123456' : Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     // FIX BUG-006: Validate that the email belongs to a registered account before
     // sending anything. Return 404 for unregistered emails rather than silently succeeding.

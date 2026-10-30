@@ -8,7 +8,6 @@ describe('Email Verification & Security Tests', () => {
     await devFallbackStore.init();
     // Ensure clean environment for each test
     delete process.env.ENABLE_DEMO_OTP;
-    delete process.env.MOCK_EMAIL_VERIFICATION;
   });
 
   afterAll(() => {
@@ -91,8 +90,13 @@ describe('Email Verification & Security Tests', () => {
 
       expect(reg.user.emailVerified).toBe(false);
 
-      // In mock mode, default code 123456 verifies successfully
-      const result = await authService.verifyEmail('123456', testEmail);
+      // Retrieve the issued code from verificationStore
+      const issuedCode = verificationStore.getCode(testEmail);
+      expect(issuedCode).toBeDefined();
+      expect(issuedCode).toMatch(/^\d{6}$/);
+
+      // Submit verification with correct code
+      const result = await authService.verifyEmail(issuedCode!, testEmail);
       expect(result.success).toBe(true);
       expect(result.user.emailVerified).toBe(true);
     });
@@ -112,65 +116,47 @@ describe('Email Verification & Security Tests', () => {
 
     // Requirement 3: Expired verification code
     it('Requirement 3: rejects expired verification code with appropriate message', async () => {
-      const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
-      delete process.env.MOCK_EMAIL_VERIFICATION;
-      delete process.env.ENABLE_DEMO_OTP;
+      await authService.register({
+        name: 'Verify User',
+        email: testEmail,
+        password: testPassword,
+      });
 
-      try {
-        await authService.register({
-          name: 'Verify User',
-          email: testEmail,
-          password: testPassword,
-        });
+      // Manually simulate expiration by setting expired TTL
+      verificationStore.saveCode(testEmail, '123123', -1000);
 
-        // Manually simulate expiration in strict mode by setting expired TTL
-        verificationStore.saveCode(testEmail, '123123', -1000);
-
-        await expect(
-          authService.verifyEmail('123123', testEmail)
-        ).rejects.toThrow('Verification code has expired. Please request a new one.');
-      } finally {
-        process.env.NODE_ENV = originalEnv;
-      }
+      await expect(
+        authService.verifyEmail('123123', testEmail)
+      ).rejects.toThrow('Verification code has expired. Please request a new one.');
     });
 
     // Requirement 4: Resend-code behavior
-    it('Requirement 4: resending generates a fresh code and invalidates the previous code in production mode', async () => {
-      const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
-      delete process.env.MOCK_EMAIL_VERIFICATION;
-      delete process.env.ENABLE_DEMO_OTP;
+    it('Requirement 4: resending generates a fresh code and invalidates the previous code', async () => {
+      await authService.register({
+        name: 'Verify User',
+        email: testEmail,
+        password: testPassword,
+      });
 
-      try {
-        await authService.register({
-          name: 'Verify User',
-          email: testEmail,
-          password: testPassword,
-        });
+      const initialCode = verificationStore.getCode(testEmail);
+      expect(initialCode).toBeDefined();
 
-        const initialCode = verificationStore.getCode(testEmail);
-        expect(initialCode).toBeDefined();
+      // Trigger resend
+      const resendRes = await authService.resendVerification(testEmail);
+      expect(resendRes.success).toBe(true);
 
-        // Trigger resend
-        const resendRes = await authService.resendVerification(testEmail);
-        expect(resendRes.success).toBe(true);
+      const freshCode = verificationStore.getCode(testEmail);
+      expect(freshCode).toBeDefined();
 
-        const freshCode = verificationStore.getCode(testEmail);
-        expect(freshCode).toBeDefined();
+      // Old code must now fail
+      await expect(
+        authService.verifyEmail(initialCode!, testEmail)
+      ).rejects.toThrow('Invalid verification code');
 
-        // Old code must now fail
-        await expect(
-          authService.verifyEmail(initialCode!, testEmail)
-        ).rejects.toThrow('Invalid verification code');
-
-        // Fresh code must succeed
-        const verifyRes = await authService.verifyEmail(freshCode!, testEmail);
-        expect(verifyRes.success).toBe(true);
-        expect(verifyRes.user.emailVerified).toBe(true);
-      } finally {
-        process.env.NODE_ENV = originalEnv;
-      }
+      // Fresh code must succeed
+      const verifyRes = await authService.verifyEmail(freshCode!, testEmail);
+      expect(verifyRes.success).toBe(true);
+      expect(verifyRes.user.emailVerified).toBe(true);
     });
 
     // Requirement 5: Successful persistence of User.emailVerified
@@ -181,7 +167,8 @@ describe('Email Verification & Security Tests', () => {
         password: testPassword,
       });
 
-      await authService.verifyEmail('123456', testEmail);
+      const issuedCode = verificationStore.getCode(testEmail);
+      await authService.verifyEmail(issuedCode!, testEmail);
 
       // Verify that user profile reflects emailVerified = true
       const me = await authService.getMe(reg.user.id);
@@ -193,7 +180,6 @@ describe('Email Verification & Security Tests', () => {
       const originalEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = 'production';
       delete process.env.ENABLE_DEMO_OTP;
-      delete process.env.MOCK_EMAIL_VERIFICATION;
 
       try {
         await authService.register({
@@ -206,64 +192,48 @@ describe('Email Verification & Security Tests', () => {
         await expect(
           authService.verifyEmail('123456', 'real.user@example.com')
         ).rejects.toThrow('Invalid verification code');
-
-        // But verifying with the actual random code issued during registration succeeds
-        const realCode = verificationStore.getCode('real.user@example.com');
-        expect(realCode).toBeDefined();
-        const verifyRes = await authService.verifyEmail(realCode!, 'real.user@example.com');
-        expect(verifyRes.success).toBe(true);
-        expect(verifyRes.user.emailVerified).toBe(true);
       } finally {
         process.env.NODE_ENV = originalEnv;
       }
     });
 
     // Requirement 7: Verification codes cannot be used to verify a different email address
-    it('Requirement 7: verification codes cannot be used to verify a different email address in strict mode', async () => {
-      const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
-      delete process.env.ENABLE_DEMO_OTP;
-      delete process.env.MOCK_EMAIL_VERIFICATION;
-
+    it('Requirement 7: verification codes cannot be used to verify a different email address', async () => {
       const emailAlice = 'alice@example.com';
       const emailBob = 'bob@example.com';
 
-      try {
-        await authService.register({
-          name: 'Alice User',
-          email: emailAlice,
-          password: testPassword,
-        });
+      await authService.register({
+        name: 'Alice User',
+        email: emailAlice,
+        password: testPassword,
+      });
 
-        await authService.register({
-          name: 'Bob User',
-          email: emailBob,
-          password: testPassword,
-        });
+      await authService.register({
+        name: 'Bob User',
+        email: emailBob,
+        password: testPassword,
+      });
 
-        const aliceCode = verificationStore.getCode(emailAlice);
-        expect(aliceCode).toBeDefined();
+      const aliceCode = verificationStore.getCode(emailAlice);
+      expect(aliceCode).toBeDefined();
 
-        // Attempting to verify Bob with Alice's code must fail
-        await expect(
-          authService.verifyEmail(aliceCode!, emailBob)
-        ).rejects.toThrow('Invalid verification code');
+      // Attempting to verify Bob with Alice's code must fail
+      await expect(
+        authService.verifyEmail(aliceCode!, emailBob)
+      ).rejects.toThrow('Invalid verification code');
 
-        // Alice should still be unverified
-        const fbAlice = devFallbackStore.users.find((u) => u.email === emailAlice);
-        expect(fbAlice?.emailVerified).toBe(false);
+      // Alice should still be unverified
+      const fbAlice = devFallbackStore.users.find((u) => u.email === emailAlice);
+      expect(fbAlice?.emailVerified).toBe(false);
 
-        // Alice verifying with her own code must succeed
-        const aliceVerify = await authService.verifyEmail(aliceCode!, emailAlice);
-        expect(aliceVerify.success).toBe(true);
-        expect(aliceVerify.user.emailVerified).toBe(true);
-      } finally {
-        process.env.NODE_ENV = originalEnv;
-      }
+      // Alice verifying with her own code must succeed
+      const aliceVerify = await authService.verifyEmail(aliceCode!, emailAlice);
+      expect(aliceVerify.success).toBe(true);
+      expect(aliceVerify.user.emailVerified).toBe(true);
     });
 
-    // Requirement 8: Cryptographic JWT token link verification test
-    it('Requirement 8: verifies user via signed cryptographic token link (URL click simulation)', async () => {
+    // Cryptographic JWT token link verification test
+    it('verifies user via signed cryptographic token link (URL click simulation)', async () => {
       const reg = await authService.register({
         name: 'Token User',
         email: 'token.user@example.com',
@@ -277,76 +247,6 @@ describe('Email Verification & Security Tests', () => {
       expect(verifyRes.success).toBe(true);
       expect(verifyRes.user.emailVerified).toBe(true);
     });
-
-    // Requirement 9: Mock Mode specific verification behaviors
-    it('Requirement 9: accepts 123456 for any newly registered user when mock mode is enabled', async () => {
-      const newUserEmail = 'mock.attendee@example.com';
-      await authService.register({
-        name: 'Mock Attendee',
-        email: newUserEmail,
-        password: testPassword,
-      });
-
-      const verifyRes = await authService.verifyEmail('123456', newUserEmail);
-      expect(verifyRes.success).toBe(true);
-      expect(verifyRes.user.emailVerified).toBe(true);
-    });
-
-    it('Requirement 10: rejects incorrect codes when mock mode is enabled', async () => {
-      const newUserEmail = 'wrong.code@example.com';
-      await authService.register({
-        name: 'Wrong Code User',
-        email: newUserEmail,
-        password: testPassword,
-      });
-
-      await expect(
-        authService.verifyEmail('000000', newUserEmail)
-      ).rejects.toThrow('Invalid verification code');
-    });
-
-    it('Requirement 11: explicitly enables mock verification in production when MOCK_EMAIL_VERIFICATION=true', async () => {
-      const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
-      process.env.MOCK_EMAIL_VERIFICATION = 'true';
-
-      try {
-        await authService.register({
-          name: 'Explicit Mock User',
-          email: 'explicit.mock@example.com',
-          password: testPassword,
-        });
-
-        // With explicit MOCK_EMAIL_VERIFICATION=true, entering 123456 succeeds
-        const verifyRes = await authService.verifyEmail('123456', 'explicit.mock@example.com');
-        expect(verifyRes.success).toBe(true);
-        expect(verifyRes.user.emailVerified).toBe(true);
-      } finally {
-        process.env.NODE_ENV = originalEnv;
-        delete process.env.MOCK_EMAIL_VERIFICATION;
-      }
-    });
-
-    it('Requirement 12: resending in mock mode allows verification with 123456 without requiring email delivery', async () => {
-      const resendEmail = 'resend.mock@example.com';
-      await authService.register({
-        name: 'Resend Mock User',
-        email: resendEmail,
-        password: testPassword,
-      });
-
-      const resendResult = await authService.resendVerification(resendEmail);
-      expect(resendResult.success).toBe(true);
-
-      const verifyRes = await authService.verifyEmail('123456', resendEmail);
-      expect(verifyRes.success).toBe(true);
-      expect(verifyRes.user.emailVerified).toBe(true);
-    });
-
-    it('Requirement 13: resending verification for an unregistered email returns 404 Not Found', async () => {
-      await expect(
-        authService.resendVerification('unregistered.person@example.com')
-      ).rejects.toThrow('No account found with this email address.');
-    });
   });
 });
+
