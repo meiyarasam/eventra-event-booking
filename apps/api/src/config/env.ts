@@ -35,4 +35,20 @@ export const env = {
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || '',
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || '',
   isProduction: process.env.NODE_ENV === 'production',
+  mockEmailVerification:
+    process.env.MOCK_EMAIL_VERIFICATION === 'true' ||
+    process.env.ENABLE_DEMO_OTP === 'true' ||
+    (process.env.NODE_ENV !== 'production' &&
+      process.env.MOCK_EMAIL_VERIFICATION !== 'false' &&
+      process.env.ENABLE_DEMO_OTP !== 'false'),
 };
+
+export function isMockEmailVerificationEnabled(): boolean {
+  if (process.env.MOCK_EMAIL_VERIFICATION === 'true' || process.env.ENABLE_DEMO_OTP === 'true') {
+    return true;
+  }
+  if (process.env.MOCK_EMAIL_VERIFICATION === 'false' || process.env.ENABLE_DEMO_OTP === 'false') {
+    return false;
+  }
+  return process.env.NODE_ENV !== 'production';
+}
