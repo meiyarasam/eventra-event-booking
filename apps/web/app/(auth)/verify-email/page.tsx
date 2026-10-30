@@ -24,8 +24,8 @@ function VerifyEmailForm() {
   const [isVerified, setIsVerified] = useState(false);
 
   const isDemoMode =
-    process.env.NEXT_PUBLIC_ENABLE_DEMO_OTP === 'true' ||
-    (process.env.NODE_ENV !== 'production' && process.env.NEXT_PUBLIC_ENABLE_DEMO_OTP !== 'false');
+    process.env.NEXT_PUBLIC_ENABLE_DEMO_OTP !== 'false' &&
+    process.env.NEXT_PUBLIC_MOCK_EMAIL_VERIFICATION !== 'false';
 
   const verifyMutation = useMutation({
     mutationFn: (payload: { tokenOrOtp: string; email?: string }) =>

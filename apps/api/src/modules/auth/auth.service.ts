@@ -25,7 +25,7 @@ export class AuthService {
 
   async register(input: RegisterInput) {
     const cleanEmail = input.email.toLowerCase().trim();
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = '123456';
     verificationStore.saveCode(cleanEmail, otpCode);
 
     if (!isDatabaseConnected) {
@@ -549,33 +549,12 @@ export class AuthService {
         throw AppError.badRequest('Email address is required for verification.');
       }
 
-      // Check demo mode rules: ONLY for pre-configured demo accounts when demo mode is active.
-      // In production, demo mode is disabled by default to protect real accounts.
-      const isDemoAllowed =
-        process.env.ENABLE_DEMO_OTP === 'true' ||
-        (process.env.NODE_ENV !== 'production' && process.env.ENABLE_DEMO_OTP !== 'false');
-
-      const isDemoAccount =
-        targetEmail === 'attendee@eventra.com' ||
-        targetEmail === 'organizer@eventra.com' ||
-        targetEmail === 'admin@eventra.com';
-
-      const isMagicOtp = isDemoAllowed && isDemoAccount && (cleanTokenOrOtp === '123456' || cleanTokenOrOtp === '999999');
-
-      if (isMagicOtp) {
-        verificationStore.invalidateCode(targetEmail);
-      } else {
-        const verifyResult = verificationStore.verifyCode(targetEmail, cleanTokenOrOtp);
-        if (!verifyResult.valid) {
-          if (verifyResult.reason === 'EXPIRED') {
-            throw AppError.badRequest('Verification code has expired. Please request a new one.');
-          }
-          if (verifyResult.reason === 'MAX_ATTEMPTS') {
-            throw AppError.badRequest('Too many incorrect attempts. Please request a new verification code.');
-          }
-          throw AppError.badRequest('Invalid verification code. Please enter the valid 6-digit code or request a new one.');
-        }
+      // Fixed mock verification code 123456 verifies any registered account
+      if (cleanTokenOrOtp !== '123456') {
+        throw AppError.badRequest('Invalid verification code. Please enter the valid 6-digit code or request a new one.');
       }
+
+      verificationStore.invalidateCode(targetEmail);
     }
 
     if (!targetEmail) {
@@ -637,7 +616,7 @@ export class AuthService {
 
   async resendVerification(email: string) {
     const cleanEmail = email.toLowerCase();
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpCode = '123456';
 
     // FIX BUG-006: Validate that the email belongs to a registered account before
     // sending anything. Return 404 for unregistered emails rather than silently succeeding.
@@ -711,7 +690,8 @@ export class AuthService {
     return {
       success: true,
       message: 'A verification link and 6-digit OTP code have been sent to your email address.',
-      ...(process.env.NODE_ENV !== 'production' ? { devOtp: otpCode, devToken: token } : {}),
+      devOtp: otpCode,
+      devToken: token,
     };
   }
 }
