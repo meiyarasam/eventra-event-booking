@@ -1,5 +1,7 @@
 # EVENTRA — AI-Powered Event Discovery, Booking & Ticketing Platform
 
+[![Live Website](https://img.shields.io/badge/Live%20Website-Vercel-success?style=for-the-badge&logo=vercel)](https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/)
+
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js%2014%20App%20Router-black?style=flat&logo=next.js)](https://nextjs.org/)
 [![Express.js](https://img.shields.io/badge/Backend-Express.js%20TypeScript-000000?style=flat&logo=express)](https://expressjs.com/)
 [![Prisma](https://img.shields.io/badge/ORM-Prisma%205-2D3748?style=flat&logo=prisma)](https://www.prisma.io/)
@@ -8,6 +10,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> **Live Website:** [https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/](https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/)  
 > **Repository:** `eventra-ai-event-platform`  
 > A full-stack, enterprise-grade event discovery, booking, and ticket management platform engineered with concurrency-safe inventory reservations, cryptographic QR entry passes, automated email delivery, and multi-modal Google Gemini AI integrations.
 
@@ -580,12 +583,14 @@ npm --workspace=packages/shared exec -- tsc --noEmit
 3. Add production environment variables: `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `FRONTEND_URL`, `SMTP_*`, and `GEMINI_API_KEY`.
 
 ### C. Frontend Web Deployment (Vercel)
+- **Live Deployed Application:** [https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/](https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/)
+
 1. Import repository into [Vercel](https://vercel.com).
 2. Select Framework Preset: **Next.js**.
 3. Set **Root Directory** to `apps/web`.
 4. Add environment variables:
    - `NEXT_PUBLIC_API_URL`: `https://your-api-domain.com/api/v1`
-   - `NEXT_PUBLIC_APP_URL`: `https://your-web-domain.com`
+   - `NEXT_PUBLIC_APP_URL`: `https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app`
 5. Click **Deploy**.
 
 ---

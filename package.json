@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Production-Quality Event Discovery, Booking & Ticketing Platform",
+  "homepage": "https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/",
   "workspaces": [
     "packages/*",
     "apps/*"

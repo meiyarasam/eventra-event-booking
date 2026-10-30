@@ -2,6 +2,7 @@
   "name": "@eventra/web",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://eventra-lxtc0uqsr-meiyarasanmeiyarasan3-7028s-projects.vercel.app/",
   "scripts": {
     "dev": "next dev -p 3000",
     "build:shared": "npm --prefix ../../packages/shared run build",
